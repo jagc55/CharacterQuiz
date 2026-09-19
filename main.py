@@ -34,11 +34,11 @@ def list_characters():
 def main():
     print_banner()
 
-    parser = argparse.ArgumentParser(description="Generador automático de videos de personajes difuminados para TikTok y Shorts")
-    parser.add_argument("--once", action="store_true", help="Genera un único video ahora mismo y finaliza.")
+    parser = argparse.ArgumentParser(description="Generador automático de videos de adivinanza de videojuegos para TikTok y Shorts")
+    parser.add_argument("--once", action="store_true", help="Genera un único video (3 personajes) ahora mismo y finaliza.")
     parser.add_argument("--schedule", action="store_true", help="Inicia la automatización continua cada 4 horas.")
     parser.add_argument("--interval", type=int, default=SCHEDULE_INTERVAL_HOURS, help=f"Intervalo de horas entre videos (por defecto {SCHEDULE_INTERVAL_HOURS}h).")
-    parser.add_argument("--character", type=str, help="Fuerza la generación de un personaje concreto por su ID.")
+    parser.add_argument("--character", type=str, help="Fuerza personajes concretos por su ID separados por comas (ej. mario,sonic,kratos).")
     parser.add_argument("--list-characters", action="store_true", help="Muestra la lista de personajes disponibles y su estado en el historial.")
 
     args = parser.parse_args()
@@ -61,10 +61,10 @@ def main():
 
     # Si se ejecuta sin argumentos, mostramos ayuda y opciones rápidas
     print("Opciones de ejecución:")
-    print("  python main.py --once                   -> Genera 1 video de prueba ahora mismo.")
+    print("  python main.py --once                   -> Genera 1 video de 3 personajes ahora mismo.")
     print("  python main.py --schedule               -> Inicia el ciclo automático cada 4 horas.")
     print("  python main.py --list-characters        -> Ver lista de personajes y estado.")
-    print("  python main.py --character <id> --once  -> Genera video de un personaje específico.\n")
+    print("  python main.py --character mario,sonic,kratos --once  -> Genera video con personajes específicos.\n")
 
 if __name__ == "__main__":
     main()

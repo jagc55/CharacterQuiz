@@ -1,9 +1,14 @@
 [
   {
-    "character_id": "mario",
-    "timestamp": "2026-09-19T05:39:33.970584",
-    "video_path": "C:\\Users\\Juanan\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_053919_mario.mp4",
+    "character_id": "sol_badguy",
+    "character_ids": [
+      "sol_badguy",
+      "alb_ndiga_dogmeat",
+      "monokuma"
+    ],
+    "timestamp": "2026-09-19T18:59:12.949867",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_185842_sol_badguy_alb_ndiga_dogmeat_monokuma.mp4",
     "youtube_status": "SKIPPED_NO_CREDENTIALS",
-    "tiktok_status": "SKIPPED_NO_CREDENTIALS"
+    "tiktok_status": "ERROR"
   }
 ]

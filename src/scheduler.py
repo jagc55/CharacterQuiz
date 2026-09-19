@@ -3,7 +3,7 @@ import schedule
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from .config import SCHEDULE_INTERVAL_HOURS
+from .config import SCHEDULE_INTERVAL_HOURS, CHARACTERS_PER_VIDEO
 from .character_manager import CharacterManager
 from .video_generator import VideoGenerator
 from .uploaders.manager import UploadManager
@@ -16,26 +16,31 @@ class QuizScheduler:
         self.upload_manager = UploadManager()
 
     def run_cycle(self, force_character_id=None):
-        """Ejecuta un ciclo completo: selección, generación, publicación y registro."""
+        """Ejecuta un ciclo completo: selección de 3 personajes, generación, publicación y registro."""
         print("\n" + "#"*55)
         print(f"⏰ [CICLO DE AUTOMATIZACIÓN] {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("#"*55)
 
-        # 1. Obtener siguiente personaje
-        character = self.character_manager.get_next_character(force_id=force_character_id)
-        print(f"🎯 Personaje seleccionado: {character['name']} ({character.get('game', '')})")
+        # 1. Obtener personajes para el video (3 personajes)
+        characters = self.character_manager.get_next_characters(
+            count=CHARACTERS_PER_VIDEO,
+            force_ids=force_character_id
+        )
+        names = [c['name'] for c in characters]
+        print(f"🎯 {len(characters)} personajes seleccionados: {', '.join(names)}")
 
         # 2. Generar video en Blurred_characters/
-        video_path, metadata = self.video_generator.generate_video(character)
+        video_path, metadata = self.video_generator.generate_video(characters)
 
         # 3. Intentar publicación en redes
         updated_metadata = self.upload_manager.process_uploads(video_path, metadata)
 
         # 4. Registrar en historial para no repetir
-        self.character_manager.record_usage(character["id"], video_path, updated_metadata)
+        char_ids = [c["id"] for c in characters]
+        self.character_manager.record_usage(char_ids, video_path, updated_metadata)
 
         next_time = datetime.now() + timedelta(hours=self.interval_hours)
-        print(f"🎉 Ciclo completado para '{character['name']}'.")
+        print(f"🎉 Ciclo completado para: {', '.join(names)}.")
         print(f"🕒 Próxima generación programada para: {next_time.strftime('%Y-%m-%d %H:%M:%S')} (dentro de {self.interval_hours}h)")
         print("#"*55 + "\n")
 

@@ -13,10 +13,11 @@ echo  [1] Generar 1 video ahora mismo (--once)
 echo  [2] Iniciar generador automatico cada 4 horas (--schedule)
 echo  [3] Ver catalogo de personajes y estado (--list-characters)
 echo  [4] Abrir carpeta de videos (Blurred_characters)
-echo  [5] Salir
+echo  [5] Abrir carpeta de fondos (Background)
+echo  [6] Salir
 echo.
 echo =============================================================
-set /p opt="Selecciona una opción (1-5): "
+set /p opt="Selecciona una opción (1-6): "
 
 if "%opt%"=="1" (
     cls
@@ -51,6 +52,15 @@ if "%opt%"=="4" (
 )
 
 if "%opt%"=="5" (
+    if exist "%~dp0Background" (
+        start "" "%~dp0Background"
+    ) else (
+        start "" "%~dp0backgrounds"
+    )
+    goto menu
+)
+
+if "%opt%"=="6" (
     exit
 )
 

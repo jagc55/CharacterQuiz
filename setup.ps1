@@ -15,22 +15,28 @@ $hasWinget = Get-Command winget -ErrorAction SilentlyContinue
 
 # 2. Comprobar / Instalar Python
 Write-Host "[1/5] Comprobando instalacion de Python..." -ForegroundColor Cyan
-$pythonCmd = Get-Command python -ErrorAction SilentlyContinue
+$pythonOk = $false
+try {
+    $pyCheck = python --version 2>&1
+    if ($pyCheck -match "Python 3\.") {
+        $pythonOk = $true
+        Write-Host "OK: $pyCheck detectado." -ForegroundColor Green
+    }
+} catch {
+    $pythonOk = $false
+}
 
-if (-not $pythonCmd) {
-    Write-Host "Python no encontrado en el sistema." -ForegroundColor Yellow
+if (-not $pythonOk) {
+    Write-Host "Python no encontrado o no configurado en el sistema." -ForegroundColor Yellow
     if ($hasWinget) {
         Write-Host "Instalando Python 3.12 mediante winget..." -ForegroundColor Green
-        winget install --id Python.Python.3.12 --accept-source-agreements --accept-package-agreements
+        winget install --id Python.Python.3.12 --scope user --accept-source-agreements --accept-package-agreements
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
     } else {
         Write-Host "ERROR: winget no disponible. Instala Python 3.12 desde https://www.python.org/downloads/" -ForegroundColor Red
         Pause
         Exit 1
     }
-} else {
-    $pyVersion = python --version
-    Write-Host "OK: $pyVersion detectado." -ForegroundColor Green
 }
 
 # 3. Comprobar / Instalar FFmpeg

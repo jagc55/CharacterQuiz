@@ -16,26 +16,40 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 ASSETS_DIR = BASE_DIR / "assets"
 CHARACTERS_IMG_DIR = ASSETS_DIR / "characters"
 AUDIO_DIR = ASSETS_DIR / "audio"
+BGM_DIR = AUDIO_DIR / "bgm"
+# Carpeta de fondos en la raíz del proyecto (Background o backgrounds)
+if (BASE_DIR / "Background").exists():
+    BACKGROUNDS_DIR = BASE_DIR / "Background"
+elif (BASE_DIR / "backgrounds").exists():
+    BACKGROUNDS_DIR = BASE_DIR / "backgrounds"
+else:
+    BACKGROUNDS_DIR = BASE_DIR / "Background"
+    BACKGROUNDS_DIR.mkdir(parents=True, exist_ok=True)
+
 DATA_DIR = BASE_DIR / "data"
 
 CHARACTERS_FILE = DATA_DIR / "characters.json"
 HISTORY_FILE = DATA_DIR / "history.json"
 
 # Asegurar directorios
-for directory in [CHARACTERS_IMG_DIR, AUDIO_DIR, DATA_DIR]:
+for directory in [CHARACTERS_IMG_DIR, AUDIO_DIR, BGM_DIR, DATA_DIR]:
     directory.mkdir(parents=True, exist_ok=True)
 
 # Configuración del Video (Formato Vertical 9:16 para TikTok y YouTube Shorts)
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 VIDEO_FPS = 30
-VIDEO_DURATION = 13.0  # Duración óptima para retención y viralidad
 
-# Fases del video en segundos
-PHASE_1_END = 3.5    # Difuminado muy alto (100% misterio)
-PHASE_2_END = 6.5    # Difuminado medio (50%, primera pista)
-PHASE_3_END = 9.0    # Difuminado suave (cuenta atrás 3, 2, 1)
-REVEAL_START = 9.0   # Revelación nítida (0% difuminado)
+# Estructura Multi-Personaje (3 personajes por video)
+CHARACTERS_PER_VIDEO = 3
+ROUND_DURATION = 10.0  # Duración de cada ronda en segundos
+VIDEO_DURATION = ROUND_DURATION * CHARACTERS_PER_VIDEO  # 30.0s en total
+
+# Fases de puntuación y pixelado por ronda (en segundos de 0.0 a 10.0)
+PHASE_3PTS_END = 2.5       # 0.0s - 2.5s: Pixelado alto -> 3 PUNTOS
+PHASE_2PTS_END = 5.0       # 2.5s - 5.0s: Pixelado medio -> 2 PUNTOS
+PHASE_1PTO_END = 7.5       # 5.0s - 7.5s: Pixelado leve -> 1 PUNTO
+ROUND_REVEAL_START = 7.5   # 7.5s - 10.0s: Revelación nítida -> 0 PUNTOS (Tiempo finalizado)
 
 # Programación de subidas automáticas (cada 4 horas)
 SCHEDULE_INTERVAL_HOURS = int(os.getenv("SCHEDULE_INTERVAL_HOURS", 4))
