@@ -1,75 +1,72 @@
-# 🎮 Adivina el Personaje de Videojuegos (TikTok & YouTube Shorts)
+# 🎮 CharacterQuiz: Automated Video Game Character Quiz for TikTok & YouTube Shorts
 
-Sistema automatizado en **Python** para la generación y publicación periódica (cada 4 horas) de videos verticales estilo Shorts / TikTok de **"Adivina el personaje"**. 
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/jagc55/CharacterQuiz)
+[![Format](https://img.shields.io/badge/video%20format-9%3A16%20%281080x1920%29-purple.svg)](https://github.com/jagc55/CharacterQuiz)
 
-El video presenta a un personaje icónico de videojuegos fuertemente difuminado que va perdiendo el desenfoque en distintas fases conforme avanza el tiempo y se muestran pistas, culminando con una revelación nítida, fanfarria y llamada a la acción para maximizar comentarios y retención.
+*Translations: [English](README.md) | [Español](README_es.md)*
+
+**CharacterQuiz** is a fully automated Python system designed to generate, schedule, and publish high-retention vertical videos (9:16, 1080x1920) for **TikTok** and **YouTube Shorts**.
+
+The format revolves around an engaging video game quiz: an iconic character starts heavily blurred and progressively clarifies across timed stages as clues and audio countdowns intensify, finishing with a crisp reveal and call-to-action to maximize viewer retention and comments.
 
 ---
 
-## 📁 Carpeta de Salida Obligatoria
+## 📁 Output Directory (`Blurred_characters/`)
 
-Todos los videos generados y sus metadatos asociados se guardan en la raíz del proyecto dentro de la carpeta:
+All generated `.mp4` video files and their corresponding `.json` metadata are automatically saved into the root folder:
 ```
 Blurred_characters/
-├── quiz_20260919_053253_mario.mp4
-├── quiz_20260919_053253_mario.json
 ├── quiz_20260919_053421_kratos.mp4
-└── quiz_20260919_053421_kratos.json
+├── quiz_20260919_053421_kratos.json
+├── quiz_20260919_053919_mario.mp4
+└── quiz_20260919_053919_mario.json
 ```
-Cada video `.mp4` viene acompañado de un archivo `.json` con:
-- Título sugerido optimizado para SEO
-- Descripción con hashtags (`#Shorts`, `#Gaming`, `#AdivinaElPersonaje`, etc.)
-- Nombre del personaje y saga
-- Estado de publicación en redes sociales
+
+Each generated video includes a companion `.json` file with:
+- Suggested viral title
+- SEO description with trending hashtags (`#Shorts`, `#Gaming`, `#AdivinaElPersonaje`, etc.)
+- Character and franchise details
+- Social media publishing status
 
 ---
 
-## ⏱️ Dinámica del Video (13 Segundos, Formato 9:16)
+## ⏱️ Video Structure (13 Seconds, 9:16 Vertical)
 
-1. **0.0s – 3.5s (Fase 1 - Difuminado 100%)**:
-   - Marco neón cyberpunk con fondo contrastado.
-   - Pista 1: *"¿Reconoces los colores del personaje?"*.
-   - Música de suspense con ritmo ascendente.
-2. **3.5s – 6.5s (Fase 2 - Difuminado 50%)**:
-   - Se reduce el desenfoque a la mitad, revelando la silueta básica.
-   - Pista 2: Datos clave del personaje (año de lanzamiento, historia o creador).
-3. **6.5s – 9.0s (Fase 3 - Cuenta Atrás & Difuminado 20%)**:
-   - El difuminado se reduce al 20%, los detalles principales son visibles.
-   - Cuenta atrás de tensión en pantalla: `3... 2... 1...` con beeps ascendentes.
-   - Barra de tiempo inferior agotándose.
-4. **9.0s – 13.0s (Fase 4 - ¡Revelación!)**:
-   - Desenfoque al 0% (imagen totalmente nítida y en alta definición).
-   - Acorde triunfal de victoria / fanfarria e impacto de bajo.
-   - Anuncio destacado: `>> ¡ES [NOMBRE]! <<` y su saga.
-   - Llamada a la acción: *"¿Lo adivinaste? ¡Comenta en qué segundo!"*.
+| Time Window | Phase | Visual & Audio Dynamics |
+| :--- | :--- | :--- |
+| **0.0s – 3.5s** | **Phase 1: 100% Blur** | Total mystery. High Gaussian blur + radial ambient contrast spotlight. Clue 1: *"Can you recognize the colors?"*. Rising suspense synth beat. |
+| **3.5s – 6.5s** | **Phase 2: 50% Blur** | Blur is halved. Basic silhouette and color blocking become visible. Clue 2: Key character trivia (debut year, franchise, or backstory). |
+| **6.5s – 9.0s** | **Phase 3: 20% Blur** | Main features emerge. Dynamic on-screen countdown (`3... 2... 1...`) with ascending audio beeps and shrinking progress bar. |
+| **9.0s – 13.0s** | **Phase 4: Crisp Reveal** | **0% Blur (Full HD clarity)**. Triumphant victory fanfare & sub-bass impact. Title banner: `>> IT'S [NAME]! <<` with franchise name and comment CTA. |
 
 ---
 
-## 💻 Instalación en Otros Dispositivos
+## 💻 1-Click Multi-Device Installation
 
-Para llevar este proyecto a cualquier otro ordenador o servidor (Windows, Linux, Mac o VPS):
+To set up this project on another computer, server, or VPS:
 
-### En Windows:
-Simplemente haz doble clic sobre:
+### On Windows:
+Simply double-click:
 ```
 setup.bat
 ```
-*(O ejecuta en PowerShell: `powershell -ExecutionPolicy Bypass -File .\setup.ps1`)*
+*(Or in PowerShell: `powershell -ExecutionPolicy Bypass -File .\setup.ps1`)*
 
-El script se encargará automáticamente de:
-1. Detectar e instalar **Python 3.12** si no está presente.
-2. Detectar e instalar **FFmpeg** si no está presente.
-3. Crear todas las carpetas del proyecto (`Blurred_characters`, `assets`, `data`).
-4. Instalar todas las librerías de `requirements.txt`.
-5. Crear el archivo `.env` inicial.
+The installer automatically:
+1. Detects and installs **Python 3.12** if not present (via `winget`).
+2. Detects and installs **FFmpeg** if not present.
+3. Creates the required folder tree (`Blurred_characters`, `assets`, `data`).
+4. Installs all packages from `requirements.txt`.
+5. Creates the initial `.env` configuration file.
 
-Una vez instalado, puedes usar el menú interactivo haciendo doble clic en:
+Once installed, you can launch everything via the interactive double-click launcher:
 ```
 run.bat
 ```
 
-### En Linux / macOS / Servidores VPS:
-Ejecuta en tu terminal:
+### On Linux / macOS / VPS:
+Run in your terminal:
 ```bash
 chmod +x setup.sh
 ./setup.sh
@@ -77,54 +74,59 @@ chmod +x setup.sh
 
 ---
 
-### 1. Generar 1 video de prueba de inmediato
-```powershell
+## 🚀 CLI Usage & Commands
+
+You can also run commands directly from your terminal:
+
+### 1. Generate 1 test video immediately
+```bash
 python main.py --once
 ```
-*Selecciona automáticamente el siguiente personaje de la base de datos que no haya sido utilizado aún.*
+*Picks the next unused character in rotation from `data/characters.json` and renders the video.*
 
-### 2. Iniciar el modo automático cada 4 horas
-```powershell
+### 2. Start automated mode (every 4 hours)
+```bash
 python main.py --schedule
 ```
-*Generará un video inmediatamente y después programará uno nuevo cada 4 horas de forma indefinida.*
+*Generates an initial video right away, then schedules a new one every 4 hours indefinitely.*
 
-### 3. Generar un personaje específico
-```powershell
+### 3. Generate a specific character
+```bash
 python main.py --character sonic --once
 ```
-*Puedes usar cualquier ID: `mario`, `sonic`, `kratos`, `master_chief`, `link`, `pikachu`, `pacman`, `cloud_strife`, `lara_croft`, `solid_snake`, `steve`, `crash_bandicoot`, `samus_aran`, `donkey_kong`, `geralt`, etc.*
+*Available IDs: `mario`, `sonic`, `kratos`, `master_chief`, `link`, `pikachu`, `pacman`, `cloud_strife`, `lara_croft`, `solid_snake`, `steve`, `crash_bandicoot`, `samus_aran`, `donkey_kong`, `geralt`, etc.*
 
-### 4. Consultar el estado del catálogo y personajes ya usados
-```powershell
+### 4. Inspect character catalog and history
+```bash
 python main.py --list-characters
 ```
 
 ---
 
-## ⚙️ Conexión con YouTube Shorts y TikTok
+## ⚙️ Connecting YouTube Shorts & TikTok APIs
 
-Los videos siempre se generarán y quedarán guardados en `Blurred_characters/`. Cuando desees activar la subida directa:
+Videos are always rendered and safely stored in `Blurred_characters/`. When you are ready to enable direct auto-posting:
 
 ### YouTube Shorts:
-1. Ve a [Google Cloud Console](https://console.cloud.google.com/) y crea un proyecto.
-2. Habilita la **YouTube Data API v3**.
-3. En *Credenciales*, crea un **ID de cliente de OAuth** (tipo *Aplicación de escritorio*).
-4. Descarga el archivo JSON y colócalo en la raíz del proyecto como `client_secret.json`.
-5. La primera vez que el bot suba a YouTube, abrirá una ventana de navegador para que inicies sesión en tu canal. Después guardará el token en `youtube_token.json` y no volverá a pedirlo.
+1. Open [Google Cloud Console](https://console.cloud.google.com/) and create a project.
+2. Enable the **YouTube Data API v3**.
+3. Under *Credentials*, create an **OAuth 2.0 Client ID** (Application type: *Desktop app*).
+4. Download the JSON credentials file and place it in the project root as `client_secret.json`.
+5. On the first run with YouTube enabled, a browser window will open to authenticate your channel. The access token is saved to `youtube_token.json` for all future automated uploads.
 
 ### TikTok:
-1. Copia `.env.example` a un nuevo archivo `.env`:
-   ```powershell
-   copy .env.example .env
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env     # Linux / Mac
+   copy .env.example .env   # Windows
    ```
-2. Introduce tu token de acceso en `TIKTOK_ACCESS_TOKEN`.
+2. Insert your developer token under `TIKTOK_ACCESS_TOKEN`.
 
 ---
 
-## 🎨 Agregar Nuevos Personajes
+## 🎨 Adding Custom Characters
 
-Para añadir más personajes, simplemente abre `data/characters.json` y añade un nuevo bloque:
+To expand your catalog, simply add a new entry to `data/characters.json`:
 ```json
 {
   "id": "shadow",
@@ -132,10 +134,47 @@ Para añadir más personajes, simplemente abre `data/characters.json` y añade u
   "game": "Sonic / SEGA",
   "wiki_page": "Shadow_the_Hedgehog",
   "clues": [
-    "Creado por el Dr. Gerald Robotnik como la forma de vida suprema.",
-    "El gran rival oscuro de Sonic con botas propulsoras."
+    "Created by Dr. Gerald Robotnik as the Ultimate Life Form.",
+    "Sonic's dark rival equipped with jet-skating hover shoes."
   ],
   "tags": ["#Shadow", "#Sonic", "#SEGA", "#Gaming", "#Shorts"]
 }
 ```
-El sistema descargará automáticamente la imagen oficial desde Wikipedia si no colocas tu propia imagen PNG en `assets/characters/shadow.png`.
+If you don't provide a custom image at `assets/characters/shadow.png`, the system will automatically fetch the official high-resolution image from Wikipedia!
+
+---
+
+## 📂 Project Structure
+
+```
+CharacterQuiz/
+│
+├── Blurred_characters/            # Output directory for generated MP4 videos and JSON metadata
+├── assets/
+│   ├── characters/                # PNG character portraits (transparent/high-res)
+│   └── audio/                     # Synthesized stereo audio (suspense, beeps, fanfare)
+│
+├── data/
+│   ├── characters.json            # Database of 15+ video game characters with clues and tags
+│   └── history.json               # History log to prevent duplicate characters across cycles
+│
+├── src/
+│   ├── config.py                  # Core configuration (resolution, FPS, intervals, paths)
+│   ├── character_manager.py       # Character rotation and Wikipedia thumbnail downloader
+│   ├── audio_engine.py            # Procedural 44.1kHz stereo audio synthesizer
+│   ├── video_generator.py         # Progressive blur video rendering engine
+│   ├── scheduler.py               # 4-hour background scheduler loop
+│   └── uploaders/
+│       ├── youtube_uploader.py    # YouTube Data API v3 integration (#Shorts)
+│       ├── tiktok_uploader.py     # TikTok Content Posting API v2 integration
+│       └── manager.py             # Upload dispatcher and status logger
+│
+├── .env.example                   # Environment variables template
+├── requirements.txt               # Python package dependencies
+├── setup.bat / setup.ps1          # 1-click Windows installer
+├── setup.sh                       # Linux / macOS installer
+├── run.bat                        # Interactive Windows launcher
+├── main.py                        # Main CLI entrypoint
+├── README.md                      # English documentation
+└── README_es.md                   # Spanish documentation
+```
