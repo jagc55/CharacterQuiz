@@ -1,0 +1,167 @@
+[
+  {
+    "id": "mario",
+    "name": "Mario",
+    "game": "Super Mario Bros / Nintendo",
+    "wiki_page": "Mario_(character)",
+    "clues": [
+      "Su primera aparición fue en 1981 con el nombre Jumpman.",
+      "Es el fontanero italiano más famoso de todos los tiempos."
+    ],
+    "tags": ["#Mario", "#SuperMario", "#Nintendo", "#AdivinaElPersonaje", "#Gaming", "#Shorts", "#TikTokQuiz"]
+  },
+  {
+    "id": "sonic",
+    "name": "Sonic the Hedgehog",
+    "game": "Sonic / SEGA",
+    "wiki_page": "Sonic_the_Hedgehog_(character)",
+    "clues": [
+      "Nació en 1991 como la gran mascota azul de SEGA.",
+      "Es conocido por ser el erizo más veloz del universo."
+    ],
+    "tags": ["#Sonic", "#Sega", "#SonicTheHedgehog", "#GamingQuiz", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "kratos",
+    "name": "Kratos",
+    "game": "God of War / PlayStation",
+    "wiki_page": "Kratos_(God_of_War)",
+    "clues": [
+      "Conocido como el Fantasma de Esparta.",
+      "Ha desafiado tanto al panteón griego como al nórdico."
+    ],
+    "tags": ["#Kratos", "#GodOfWar", "#PlayStation", "#Gaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "master_chief",
+    "name": "Master Chief (Jefe Maestro)",
+    "game": "Halo / Xbox",
+    "wiki_page": "Master_Chief_(Halo)",
+    "clues": [
+      "Es un supersoldado del programa Spartan-II, con código John-117.",
+      "El gran icono verde y salvador de la humanidad en Xbox."
+    ],
+    "tags": ["#Halo", "#MasterChief", "#Xbox", "#JefeMaestro", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "link",
+    "name": "Link",
+    "game": "The Legend of Zelda / Nintendo",
+    "wiki_page": "Link_(The_Legend_of_Zelda)",
+    "clues": [
+      "Portador de la Espada Maestra y la Trifuerza del Valor.",
+      "El héroe silencioso que despierta para salvar el reino de Hyrule."
+    ],
+    "tags": ["#Zelda", "#Link", "#NintendoSwitch", "#BreathOfTheWild", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "pikachu",
+    "name": "Pikachu",
+    "game": "Pokémon / Nintendo",
+    "wiki_page": "Pikachu",
+    "clues": [
+      "Es el Pokémon número 25 de la Pokédex Nacional.",
+      "Su ataque característico es el Impactrueno y almacena electricidad en sus mejillas."
+    ],
+    "tags": ["#Pokemon", "#Pikachu", "#Nintendo", "#Anime", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "pacman",
+    "name": "Pac-Man",
+    "game": "Pac-Man / Bandai Namco",
+    "wiki_page": "Pac-Man_(character)",
+    "clues": [
+      "Debutó en los salones recreativos en 1980 diseñado por Toru Iwatani.",
+      "Recorre laberintos comiendo puntos y huyendo de cuatro fantasmas de colores."
+    ],
+    "tags": ["#Pacman", "#RetroGaming", "#Arcade", "#BandaiNamco", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "cloud_strife",
+    "name": "Cloud Strife",
+    "game": "Final Fantasy VII / Square Enix",
+    "wiki_page": "Cloud_Strife",
+    "clues": [
+      "Ex-miembro de SOLDIER de primera clase con ojos teñidos de Mako.",
+      "Blande la legendaria Espada Mortal (Buster Sword)."
+    ],
+    "tags": ["#FinalFantasy", "#CloudStrife", "#FF7", "#SquareEnix", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "lara_croft",
+    "name": "Lara Croft",
+    "game": "Tomb Raider",
+    "wiki_page": "Lara_Croft",
+    "clues": [
+      "Arqueóloga británica aventurera que debutó en 1996.",
+      "Famosa por saquear tumbas ancestrales con sus dos pistolas."
+    ],
+    "tags": ["#TombRaider", "#LaraCroft", "#Gaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "solid_snake",
+    "name": "Solid Snake",
+    "game": "Metal Gear Solid / Konami",
+    "wiki_page": "Solid_Snake",
+    "clues": [
+      "Soldado de operaciones especiales experto en infiltración táctica.",
+      "Hijo clon del legendario Big Boss y maestro del sigilo con cajas de cartón."
+    ],
+    "tags": ["#MetalGear", "#SolidSnake", "#MGS", "#Konami", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "steve",
+    "name": "Steve",
+    "game": "Minecraft / Mojang",
+    "wiki_page": "Steve_(Minecraft)",
+    "clues": [
+      "El protagonista cúbico del videojuego más vendido de la historia.",
+      "Capaz de talar árboles con sus puños y construir cualquier mundo bloque a bloque."
+    ],
+    "tags": ["#Minecraft", "#Steve", "#MinecraftMemes", "#Gaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "crash_bandicoot",
+    "name": "Crash Bandicoot",
+    "game": "Crash Bandicoot / Naughty Dog",
+    "wiki_page": "Crash_Bandicoot_(character)",
+    "clues": [
+      "Marsupial naranja modificado genéticamente por el Doctor Neo Cortex.",
+      "Gira sobre sí mismo como un torbellino comiendo frutas Wumpa."
+    ],
+    "tags": ["#CrashBandicoot", "#PlayStation", "#RetroGaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "samus_aran",
+    "name": "Samus Aran",
+    "game": "Metroid / Nintendo",
+    "wiki_page": "Samus_Aran",
+    "clues": [
+      "Cazarrecompensas intergaláctica equipada con un traje de energía chozo.",
+      "Protagonista de una de las primeras grandes revelaciones femeninas del videojuego."
+    ],
+    "tags": ["#Metroid", "#SamusAran", "#Nintendo", "#SciFiGaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "donkey_kong",
+    "name": "Donkey Kong",
+    "game": "Donkey Kong / Nintendo",
+    "wiki_page": "Donkey_Kong_(character)",
+    "clues": [
+      "El gorila más fuerte de la selva amante incondicional de los plátanos.",
+      "Lanzaba barriles en su primer juego arcade y viste una corbata roja con sus iniciales."
+    ],
+    "tags": ["#DonkeyKong", "#Nintendo", "#DK", "#RetroGaming", "#AdivinaElPersonaje", "#Shorts"]
+  },
+  {
+    "id": "geralt",
+    "name": "Geralt de Rivia",
+    "game": "The Witcher / CD Projekt Red",
+    "wiki_page": "Geralt_of_Rivia",
+    "clues": [
+      "Conocido como el Lobo Blanco, mutado para cazar monstruos por dinero.",
+      "Lleva dos espadas en la espalda: una de acero para humanos y otra de plata para bestias."
+    ],
+    "tags": ["#TheWitcher", "#GeraltOfRivia", "#CDProjektRed", "#Gaming", "#AdivinaElPersonaje", "#Shorts"]
+  }
+]
