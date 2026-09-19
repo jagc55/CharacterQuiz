@@ -1,0 +1,50 @@
+{
+  "title": "¿Puedes adivinar estos 3 personajes de videojuegos? Quiz Gamer #Shorts",
+  "description": "¿Eres un auténtico gamer? Adivina los 3 personajes ocultos tras los píxeles.\n\nPuntuación máxima: 9 Pts (3 pts por personaje)\n\nRonda 1: Tapu Fini (Pokémon / Nintendo)\nRonda 2: Lady Dimitrescu (Alcina) (Resident Evil / Capcom)\nRonda 3: Inarius el Arcángel Creador (Diablo / Blizzard)\n\n#QuizGamer #Inarius #Nintendo #Diablo #AdivinaElPersonaje #TapuFini #LadyDimitrescu #Blizzard #ResidentEvil #Capcom #TikTokQuiz #Pokemon",
+  "characters": [
+    {
+      "id": "tapu_fini",
+      "name": "Tapu Fini",
+      "game": "Pokémon / Nintendo"
+    },
+    {
+      "id": "lady_dimitrescu_alcina",
+      "name": "Lady Dimitrescu (Alcina)",
+      "game": "Resident Evil / Capcom"
+    },
+    {
+      "id": "inarius_el_arc_ngel_creador",
+      "name": "Inarius el Arcángel Creador",
+      "game": "Diablo / Blizzard"
+    }
+  ],
+  "character_id": "tapu_fini",
+  "character_ids": [
+    "tapu_fini",
+    "lady_dimitrescu_alcina",
+    "inarius_el_arc_ngel_creador"
+  ],
+  "character_name": "Tapu Fini, Lady Dimitrescu (Alcina), Inarius el Arcángel Creador",
+  "game": "Pokémon / Nintendo, Resident Evil / Capcom, Diablo / Blizzard",
+  "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_191759_tapu_fini_lady_dimitrescu_alcina_inarius_el_arc_ngel_creador.mp4",
+  "background": "bg22.png",
+  "created_at": "2026-09-19T19:18:28.548714",
+  "tags": [
+    "#QuizGamer",
+    "#Inarius",
+    "#Nintendo",
+    "#Diablo",
+    "#AdivinaElPersonaje",
+    "#TapuFini",
+    "#LadyDimitrescu",
+    "#Blizzard",
+    "#ResidentEvil",
+    "#Capcom",
+    "#TikTokQuiz",
+    "#Pokemon",
+    "#Gaming",
+    "#Shorts"
+  ],
+  "youtube_status": "SKIPPED_NO_CREDENTIALS",
+  "tiktok_status": "ERROR"
+}

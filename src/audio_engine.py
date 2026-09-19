@@ -131,8 +131,10 @@ class AudioEngine:
         sfx_clip = AudioFileClip(str(sfx_temp)).with_volume_scaled(0.95)
 
         composite = CompositeAudioClip([bgm_sub, sfx_clip])
+        out_p = Path(output_path)
+        out_p.unlink(missing_ok=True)
         composite.write_audiofile(
-            str(output_path),
+            str(out_p),
             fps=self.sample_rate,
             logger=None
         )
@@ -242,6 +244,7 @@ class AudioEngine:
         interleaved[0::2] = left_int
         interleaved[1::2] = right_int
 
+        Path(output_path).unlink(missing_ok=True)
         with wave.open(str(output_path), 'wb') as wf:
             wf.setnchannels(2)
             wf.setsampwidth(2)

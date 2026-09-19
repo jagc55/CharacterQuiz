@@ -158,6 +158,10 @@ class VideoGenerator:
         - stage_4: Original 100% nítido   -> 0 PTS (¡REVELACIÓN!)
         """
         raw_img = Image.open(image_path).convert("RGBA")
+        # Recortar márgenes transparentes vacíos para centrar y aprovechar al máximo el foco
+        bbox = raw_img.getbbox()
+        if bbox:
+            raw_img = raw_img.crop(bbox)
 
         # Lienzo de 700x700 con foco radial de contraste
         box_size = 700

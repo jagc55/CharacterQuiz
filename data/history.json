@@ -1,13 +1,13 @@
 [
   {
-    "character_id": "sol_badguy",
+    "character_id": "wolf",
     "character_ids": [
-      "sol_badguy",
-      "alb_ndiga_dogmeat",
-      "monokuma"
+      "wolf",
+      "heihachi",
+      "solid_snake"
     ],
-    "timestamp": "2026-09-19T18:59:12.949867",
-    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_185842_sol_badguy_alb_ndiga_dogmeat_monokuma.mp4",
+    "timestamp": "2026-09-19T19:48:51.759870",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_194822_wolf_heihachi_solid_snake.mp4",
     "youtube_status": "SKIPPED_NO_CREDENTIALS",
     "tiktok_status": "ERROR"
   }

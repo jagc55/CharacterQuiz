@@ -1,9 +1,19 @@
+import sys
 import json
 import random
 import requests
+import cv2
+import numpy as np
 from pathlib import Path
 from PIL import Image
 from io import BytesIO
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 from datetime import datetime
 
 from .config import CHARACTERS_FILE, HISTORY_FILE, CHARACTERS_IMG_DIR
@@ -120,13 +130,18 @@ class CharacterManager:
 
             chosen = random.choice(ideal_candidates) if ideal_candidates else random.choice(valid_candidates)
 
+            # VALIDAR QUE EL CANDIDATO TENGA UN RECORTE LIMPIO Y AUTÉNTICO (TRANSPARENTE)
+            has_cutout = self._ensure_character_image(chosen)
+            if not has_cutout:
+                # Si falló la descarga o es una captura cuadrada con fondo opaco, descartar
+                if chosen in available:
+                    available.remove(chosen)
+                continue
+
             selected.append(chosen)
             selected_ids.add(chosen["id"])
             if chosen in available:
                 available.remove(chosen)
-
-        for char in selected:
-            self._ensure_character_image(char)
 
         return selected
 
@@ -135,54 +150,176 @@ class CharacterManager:
         chars = self.get_next_characters(count=1, force_ids=[force_id] if force_id else None)
         return chars[0]
 
+    def _get_pokemon_artwork(self, name):
+        """Descarga el arte oficial transparente desde PokeAPI para personajes de Pokémon."""
+        import re
+        clean = re.sub(r'[^a-zA-Z0-9]+', '-', name.lower()).strip('-')
+        url = f"https://pokeapi.co/api/v2/pokemon/{clean}"
+        try:
+            r = requests.get(url, timeout=5)
+            if r.status_code == 200:
+                art = r.json().get('sprites', {}).get('other', {}).get('official-artwork', {}).get('front_default')
+                if art:
+                    resp = requests.get(art, timeout=8)
+                    if resp.status_code == 200 and len(resp.content) > 1500:
+                        return Image.open(BytesIO(resp.content))
+        except Exception:
+            pass
+        return None
+
+    def _process_and_validate_cutout(self, pil_img, source_url=""):
+        """
+        Verifica exhaustivamente que la imagen sea un render auténticamente recortado con canal alfa transparente.
+        - Descarta URLs con palabras clave de logos, portadas o capturas.
+        - NUNCA aplica flood-fill ni recortes destructivos artificiales.
+        - Exige canal alfa RGBA con transparencia real (>10% y <88%).
+        - Verifica que el sujeto no sea un banner horizontal ni una marca de agua.
+        - Recorta automáticamente márgenes transparentes vacíos (autocrop) para centrar al personaje.
+        """
+        if source_url:
+            url_lower = source_url.lower()
+            for bad_kw in ["logo", "cover", "boxart", "box_art", "poster", "soundtrack", "title_screen", "banner", "screenshot"]:
+                if bad_kw in url_lower:
+                    return None, False, f"URL contiene palabra vetada ({bad_kw})"
+
+        rgba = pil_img.convert("RGBA")
+        arr = np.array(rgba)
+        h, w = arr.shape[:2]
+        alpha = arr[:, :, 3]
+
+        non_trans = alpha > 40
+        trans_ratio = float(np.mean(~non_trans))
+
+        # 1. Si no tiene píxeles visibles o está casi completamente vacía
+        if not np.any(non_trans):
+            return None, False, "Imagen completamente vacía / transparente"
+        if trans_ratio > 0.88:
+            return None, False, f"Sujeto minúsculo ({trans_ratio:.1%} transparente)"
+
+        # 2. Si es una captura opaca (screenshot o fondo sólido sin canal alfa), RECHAZAR inmediatamente
+        # NUNCA intentar flood-fill para no mutilar al personaje
+        if trans_ratio < 0.10:
+            return None, False, f"Imagen opaca sin canal alfa nativo ({trans_ratio:.1%})"
+
+        # 3. Verificación de Bounding Box y Relación de Aspecto
+        y_indices, x_indices = np.where(non_trans)
+        min_y, max_y = np.min(y_indices), np.max(y_indices)
+        min_x, max_x = np.min(x_indices), np.max(x_indices)
+        sub_w = max_x - min_x
+        sub_h = max_y - min_y
+
+        if sub_h < 0.25 * h:
+            return None, False, f"Sujeto demasiado plano ({sub_h}/{h} px)"
+
+        aspect = sub_w / max(1, sub_h)
+        if aspect > 1.50:
+            return None, False, f"Sujeto horizontal tipo banner/logo (aspecto={aspect:.2f})"
+
+        # 4. Ajustar recorte a los límites reales del sujeto (sin espacios vacíos sobrantes)
+        cropped_img = rgba.crop((min_x, min_y, max_x + 1, max_y + 1))
+
+        return cropped_img, True, f"Recorte auténtico (trans={trans_ratio:.1%}, aspect={aspect:.2f})"
+
     def _ensure_character_image(self, character):
-        """Comprueba si la imagen existe localmente; si no, la descarga."""
+        """
+        Descarga y valida la imagen del personaje.
+        Prioridad 1: 'render_url' verificado (Smash Ultimate, Wikimedia renders limpios, etc.).
+        Prioridad 2: PokeAPI oficial para Pokémon.
+        Prioridad 3: Wikipedia con filtro estricto anti-logos y anti-screenshots.
+        Garantiza que NUNCA se utilicen imágenes equivocadas ni recortes erróneos.
+        """
         char_id = character["id"]
         local_path = CHARACTERS_IMG_DIR / f"{char_id}.png"
 
-        if local_path.exists() and local_path.stat().st_size > 1000:
-            character["image_path"] = str(local_path)
-            return
+        # Si ya existe en disco y es un recorte válido
+        if local_path.exists() and local_path.stat().st_size > 1500:
+            try:
+                img = Image.open(local_path).convert("RGBA")
+                cutout_img, is_valid, reason = self._process_and_validate_cutout(img)
+                if is_valid:
+                    character["image_path"] = str(local_path)
+                    return True
+                else:
+                    local_path.unlink(missing_ok=True)
+            except Exception:
+                pass
 
-        print(f"Descargando imagen para {character['name']}...")
-        wiki_page = character.get("wiki_page")
-        if not wiki_page:
-            wiki_page = character["name"].replace(" ", "_")
+        headers = {
+            "User-Agent": "CharacterQuizBot/1.0 (gaming.quiz.bot@gmail.com)"
+        }
 
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{wiki_page}"
-        headers = {"User-Agent": "CharacterQuizBot/1.0 (contacto@gamingquiz.local)"}
-
-        try:
-            resp = requests.get(url, headers=headers, timeout=10)
-            if resp.status_code == 200:
-                data = resp.json()
-                thumb_url = data.get("thumbnail", {}).get("source")
-                if thumb_url:
-                    # Intentar obtener versión de mayor resolución reemplazando el ancho en la URL si es de wikipedia
-                    img_resp = requests.get(thumb_url, headers=headers, timeout=15)
-                    if img_resp.status_code == 200:
-                        img = Image.open(BytesIO(img_resp.content)).convert("RGBA")
-                        img.save(local_path, "PNG")
-                        print(f"Imagen guardada en {local_path}")
+        # 1. FUENTE PRIMARIA: 'render_url' directo y pre-verificado
+        render_url = character.get("render_url")
+        if render_url:
+            try:
+                resp = requests.get(render_url, headers=headers, timeout=10)
+                if resp.status_code == 200 and len(resp.content) > 1500:
+                    raw_img = Image.open(BytesIO(resp.content))
+                    cutout_img, is_valid, reason = self._process_and_validate_cutout(raw_img, render_url)
+                    if is_valid:
+                        cutout_img.save(local_path, "PNG")
                         character["image_path"] = str(local_path)
-                        return
-        except Exception as e:
-            print(f"Error descargando imagen de Wikipedia para {char_id}: {e}")
+                        try:
+                            print(f"[OK] Render oficial verificado para {character['name']}")
+                        except Exception:
+                            pass
+                        return True
+            except Exception as e:
+                try:
+                    print(f"Aviso: Error en render_url de {character['name']}: {e}")
+                except Exception:
+                    pass
 
-        # Si no se pudo descargar, creamos una tarjeta de imagen estética de respaldo
-        self._create_fallback_image(character, local_path)
-        character["image_path"] = str(local_path)
+        # 2. FUENTE SECUNDARIA: PokeAPI oficial (para Pokémon)
+        game_lower = character.get("game", "").lower()
+        if "pokémon" in game_lower or "pokemon" in game_lower:
+            poke_img = self._get_pokemon_artwork(character["name"])
+            if poke_img:
+                cutout_img, is_valid, reason = self._process_and_validate_cutout(poke_img, "https://pokeapi.co/official-artwork")
+                if is_valid:
+                    cutout_img.save(local_path, "PNG")
+                    character["image_path"] = str(local_path)
+                    try:
+                        print(f"[OK] Arte oficial Ken Sugimori (PokeAPI) para {character['name']}")
+                    except Exception:
+                        pass
+                    return True
 
-    def _create_fallback_image(self, character, output_path):
-        """Crea una imagen estilizada si no se encuentra en línea."""
-        from PIL import ImageDraw, ImageFont
-        img = Image.new("RGBA", (700, 700), (20, 20, 35, 255))
-        draw = ImageDraw.Draw(img)
-        # Dibujar bordes de neón
-        draw.rectangle([10, 10, 690, 690], outline=(0, 220, 255), width=6)
-        draw.text((350, 320), character["name"], fill=(255, 255, 255), anchor="mm")
-        img.save(output_path, "PNG")
-        print(f"Imagen de respaldo creada para {character['name']}")
+        # 3. FUENTE TERCIARIA: Wikipedia (con exclusión estricta de páginas de juegos/secuelas)
+        wiki_page = character.get("wiki_page")
+        if wiki_page:
+            # Si el nombre de la página de Wikipedia parece un juego o saga en lugar de un personaje, descartar
+            wp_lower = wiki_page.lower()
+            if any(k in wp_lower for k in ["_2", "_3", "_4", "_5", "_6", "_ii", "_iii", "_iv", "_v", "series", "franchise", "game"]):
+                return False
+
+            url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{wiki_page}"
+            try:
+                resp = requests.get(url, headers=headers, timeout=8)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    thumb_url = data.get("thumbnail", {}).get("source")
+                    if thumb_url:
+                        clean_thumb_url = thumb_url.split("?")[0]
+                        if not clean_thumb_url.lower().endswith(".png"):
+                            return False
+
+                        img_resp = requests.get(clean_thumb_url, headers=headers, timeout=12)
+                        if img_resp.status_code == 200 and len(img_resp.content) > 1500:
+                            raw_img = Image.open(BytesIO(img_resp.content))
+                            cutout_img, is_valid, reason = self._process_and_validate_cutout(raw_img, clean_thumb_url)
+                            if is_valid:
+                                cutout_img.save(local_path, "PNG")
+                                character["image_path"] = str(local_path)
+                                try:
+                                    print(f"[OK] Recorte validado para {character['name']}")
+                                except Exception:
+                                    pass
+                                return True
+            except Exception:
+                pass
+
+        return False
 
     def record_usage(self, character_ids, video_path, metadata=None):
         """Registra la creación del video en el historial para uno o varios personajes."""

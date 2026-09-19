@@ -1,0 +1,50 @@
+{
+  "title": "¿Puedes adivinar estos 3 personajes de videojuegos? Quiz Gamer #Shorts",
+  "description": "¿Eres un auténtico gamer? Adivina los 3 personajes ocultos tras los píxeles.\n\nPuntuación máxima: 9 Pts (3 pts por personaje)\n\nRonda 1: Ditto (Pokémon / Nintendo)\nRonda 2: JD Fenix (Gears of War / Xbox)\nRonda 3: Ezio Auditore da Firenze (Assassin's Creed / Ubisoft)\n\n#QuizGamer #Xbox #Ditto #Gaming #JDFenix #AdivinaElPersonaje #GearsOfWar #Ezio #Nintendo #Pokemon #TikTokQuiz #Shorts",
+  "characters": [
+    {
+      "id": "ditto",
+      "name": "Ditto",
+      "game": "Pokémon / Nintendo"
+    },
+    {
+      "id": "jd_fenix",
+      "name": "JD Fenix",
+      "game": "Gears of War / Xbox"
+    },
+    {
+      "id": "ezio_auditore_da_firenze",
+      "name": "Ezio Auditore da Firenze",
+      "game": "Assassin's Creed / Ubisoft"
+    }
+  ],
+  "character_id": "ditto",
+  "character_ids": [
+    "ditto",
+    "jd_fenix",
+    "ezio_auditore_da_firenze"
+  ],
+  "character_name": "Ditto, JD Fenix, Ezio Auditore da Firenze",
+  "game": "Pokémon / Nintendo, Gears of War / Xbox, Assassin's Creed / Ubisoft",
+  "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_192356_ditto_jd_fenix_ezio_auditore_da_firenze.mp4",
+  "background": "bg21.jpg",
+  "created_at": "2026-09-19T19:24:26.910075",
+  "tags": [
+    "#QuizGamer",
+    "#Xbox",
+    "#Ditto",
+    "#Gaming",
+    "#JDFenix",
+    "#AdivinaElPersonaje",
+    "#GearsOfWar",
+    "#Ezio",
+    "#Nintendo",
+    "#Pokemon",
+    "#TikTokQuiz",
+    "#Shorts",
+    "#AssassinsCreed",
+    "#Ubisoft"
+  ],
+  "youtube_status": "SKIPPED_NO_CREDENTIALS",
+  "tiktok_status": "ERROR"
+}
