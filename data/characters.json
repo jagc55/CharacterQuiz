@@ -133,11 +133,11 @@
   },
   {
     "id": "captain_falcon",
-    "name": "Capitán Falcon",
+    "name": "Captain Falcon",
     "game": "F-Zero / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/11/01.png",
     "tags": [
-      "#CapitánFalcon",
+      "#CaptainFalcon",
       "#F-Zero",
       "#QuizGamer",
       "#Shorts"
@@ -157,11 +157,11 @@
   },
   {
     "id": "peach",
-    "name": "Princesa Peach",
+    "name": "Princess Peach",
     "game": "Super Mario / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/13/01.png",
     "tags": [
-      "#PrincesaPeach",
+      "#PrincessPeach",
       "#SuperMario",
       "#QuizGamer",
       "#Shorts"
@@ -169,11 +169,11 @@
   },
   {
     "id": "daisy",
-    "name": "Princesa Daisy",
+    "name": "Princess Daisy",
     "game": "Super Mario / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/13e/01.png",
     "tags": [
-      "#PrincesaDaisy",
+      "#PrincessDaisy",
       "#SuperMario",
       "#QuizGamer",
       "#Shorts"
@@ -217,11 +217,11 @@
   },
   {
     "id": "zelda",
-    "name": "Princesa Zelda",
+    "name": "Princess Zelda",
     "game": "The Legend of Zelda / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/17/01.png",
     "tags": [
-      "#PrincesaZelda",
+      "#PrincessZelda",
       "#TheLegendofZelda",
       "#QuizGamer",
       "#Shorts"
@@ -481,11 +481,11 @@
   },
   {
     "id": "king_dedede",
-    "name": "Rey Dedede",
+    "name": "King Dedede",
     "game": "Kirby / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/39/01.png",
     "tags": [
-      "#ReyDedede",
+      "#KingDedede",
       "#Kirby",
       "#QuizGamer",
       "#Shorts"
@@ -493,11 +493,11 @@
   },
   {
     "id": "olimar",
-    "name": "Capitán Olimar",
+    "name": "Captain Olimar",
     "game": "Pikmin / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/40/01.png",
     "tags": [
-      "#CapitánOlimar",
+      "#CaptainOlimar",
       "#Pikmin",
       "#QuizGamer",
       "#Shorts"
@@ -553,11 +553,11 @@
   },
   {
     "id": "villager",
-    "name": "Aldeano (Villager)",
+    "name": "Villager",
     "game": "Animal Crossing / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/45/01.png",
     "tags": [
-      "#Aldeano(Villager)",
+      "#Villager",
       "#AnimalCrossing",
       "#QuizGamer",
       "#Shorts"
@@ -589,11 +589,11 @@
   },
   {
     "id": "rosalina",
-    "name": "Rosalina y Destello",
+    "name": "Rosalina & Luma",
     "game": "Super Mario / Nintendo",
     "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/48/01.png",
     "tags": [
-      "#RosalinayDestello",
+      "#Rosalina&Luma",
       "#SuperMario",
       "#QuizGamer",
       "#Shorts"
@@ -627,7 +627,7 @@
     "id": "palutena",
     "name": "Palutena",
     "game": "Kid Icarus / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/51/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/54/01.png",
     "tags": [
       "#Palutena",
       "#KidIcarus",
@@ -639,7 +639,7 @@
     "id": "pacman",
     "name": "Pac-Man",
     "game": "Pac-Man / Bandai Namco",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/52/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/55/01.png",
     "tags": [
       "#Pac-Man",
       "#Pac-Man",
@@ -649,11 +649,11 @@
   },
   {
     "id": "robin",
-    "name": "Robin (Daraen)",
+    "name": "Robin",
     "game": "Fire Emblem / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/53/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/56/01.png",
     "tags": [
-      "#Robin(Daraen)",
+      "#Robin",
       "#FireEmblem",
       "#QuizGamer",
       "#Shorts"
@@ -663,7 +663,7 @@
     "id": "shulk",
     "name": "Shulk",
     "game": "Xenoblade Chronicles / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/54/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/57/01.png",
     "tags": [
       "#Shulk",
       "#XenobladeChronicles",
@@ -675,7 +675,7 @@
     "id": "bowser_jr",
     "name": "Bowser Jr.",
     "game": "Super Mario / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/55/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/58/01.png",
     "tags": [
       "#BowserJr.",
       "#SuperMario",
@@ -687,7 +687,7 @@
     "id": "duck_hunt",
     "name": "Duck Hunt Duo",
     "game": "Duck Hunt / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/56/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/59/01.png",
     "tags": [
       "#DuckHuntDuo",
       "#DuckHunt",
@@ -699,7 +699,7 @@
     "id": "ryu",
     "name": "Ryu",
     "game": "Street Fighter / Capcom",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/57/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/60/01.png",
     "tags": [
       "#Ryu",
       "#StreetFighter",
@@ -711,7 +711,7 @@
     "id": "ken",
     "name": "Ken Masters",
     "game": "Street Fighter / Capcom",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/58/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/60e/01.png",
     "tags": [
       "#KenMasters",
       "#StreetFighter",
@@ -723,7 +723,7 @@
     "id": "cloud_strife",
     "name": "Cloud Strife",
     "game": "Final Fantasy VII / Square Enix",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/59/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/61/01.png",
     "tags": [
       "#CloudStrife",
       "#FinalFantasyVII",
@@ -735,7 +735,7 @@
     "id": "corrin",
     "name": "Corrin",
     "game": "Fire Emblem / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/60/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/62/01.png",
     "tags": [
       "#Corrin",
       "#FireEmblem",
@@ -747,7 +747,7 @@
     "id": "bayonetta",
     "name": "Bayonetta",
     "game": "Bayonetta / SEGA",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/61/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/63/01.png",
     "tags": [
       "#Bayonetta",
       "#Bayonetta",
@@ -759,7 +759,7 @@
     "id": "inkling",
     "name": "Inkling",
     "game": "Splatoon / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/62/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/64/01.png",
     "tags": [
       "#Inkling",
       "#Splatoon",
@@ -771,7 +771,7 @@
     "id": "ridley",
     "name": "Ridley",
     "game": "Metroid / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/63/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/65/01.png",
     "tags": [
       "#Ridley",
       "#Metroid",
@@ -783,7 +783,7 @@
     "id": "simon_belmont",
     "name": "Simon Belmont",
     "game": "Castlevania / Konami",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/64/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/66/01.png",
     "tags": [
       "#SimonBelmont",
       "#Castlevania",
@@ -795,7 +795,7 @@
     "id": "richter_belmont",
     "name": "Richter Belmont",
     "game": "Castlevania / Konami",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/65/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/66e/01.png",
     "tags": [
       "#RichterBelmont",
       "#Castlevania",
@@ -807,7 +807,7 @@
     "id": "king_k_rool",
     "name": "King K. Rool",
     "game": "Donkey Kong / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/66/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/67/01.png",
     "tags": [
       "#KingK.Rool",
       "#DonkeyKong",
@@ -817,11 +817,11 @@
   },
   {
     "id": "isabelle",
-    "name": "Canela (Isabelle)",
+    "name": "Isabelle",
     "game": "Animal Crossing / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/67/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/68/01.png",
     "tags": [
-      "#Canela(Isabelle)",
+      "#Isabelle",
       "#AnimalCrossing",
       "#QuizGamer",
       "#Shorts"
@@ -831,7 +831,7 @@
     "id": "incineroar",
     "name": "Incineroar",
     "game": "Pokémon / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/68/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/69/01.png",
     "tags": [
       "#Incineroar",
       "#Pokémon",
@@ -841,11 +841,11 @@
   },
   {
     "id": "piranha_plant",
-    "name": "Planta Piraña",
+    "name": "Piranha Plant",
     "game": "Super Mario / Nintendo",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/69/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/70/01.png",
     "tags": [
-      "#PlantaPiraña",
+      "#PiranhaPlant",
       "#SuperMario",
       "#QuizGamer",
       "#Shorts"
@@ -855,22 +855,10 @@
     "id": "joker",
     "name": "Joker",
     "game": "Persona 5 / SEGA",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/70/01.png",
+    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/71/01.png",
     "tags": [
       "#Joker",
       "#Persona5",
-      "#QuizGamer",
-      "#Shorts"
-    ]
-  },
-  {
-    "id": "hero",
-    "name": "Hero (Héroe)",
-    "game": "Dragon Quest / Square Enix",
-    "render_url": "https://raw.githubusercontent.com/marcrd/smash-ultimate-assets/master/renders/fighters/71/01.png",
-    "tags": [
-      "#Hero(Héroe)",
-      "#DragonQuest",
       "#QuizGamer",
       "#Shorts"
     ]
@@ -913,11 +901,11 @@
   },
   {
     "id": "spyro",
-    "name": "Spyro el Dragón",
+    "name": "Spyro",
     "game": "Spyro / Activision",
     "render_url": "https://upload.wikimedia.org/wikipedia/en/5/53/Spyro.png",
     "tags": [
-      "#SpyroelDragón",
+      "#Spyro",
       "#Spyro",
       "#QuizGamer",
       "#Shorts"

@@ -1,0 +1,50 @@
+{
+  "title": "Can you guess these 3 video game characters? Gamer Quiz #Shorts",
+  "description": "Are you a true gamer? Guess the 3 characters hidden behind the pixels.\n\nMax score: 9 Points (3 pts per character)\n\nRound 1: Mario (Super Mario)\nRound 2: Sonic the Hedgehog (Sonic)\nRound 3: Link (The Legend of Zelda)\n\n#Mario #QuizGamer #GamerQuiz #Sonic #SonictheHedgehog #GuessTheCharacter #GamingTrivia #TheLegendofZelda #Gaming #PixelQuiz #SuperMario #Link",
+  "characters": [
+    {
+      "id": "mario",
+      "name": "Mario",
+      "game": "Super Mario"
+    },
+    {
+      "id": "sonic",
+      "name": "Sonic the Hedgehog",
+      "game": "Sonic"
+    },
+    {
+      "id": "link",
+      "name": "Link",
+      "game": "The Legend of Zelda"
+    }
+  ],
+  "character_id": "mario",
+  "character_ids": [
+    "mario",
+    "sonic",
+    "link"
+  ],
+  "character_name": "Mario, Sonic the Hedgehog, Link",
+  "game": "Super Mario / Nintendo, Sonic / SEGA, The Legend of Zelda / Nintendo",
+  "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_205048_mario_sonic_link.mp4",
+  "background": "bg19.jpg",
+  "created_at": "2026-09-19T20:51:31.833363",
+  "tags": [
+    "#Mario",
+    "#QuizGamer",
+    "#GamerQuiz",
+    "#Sonic",
+    "#SonictheHedgehog",
+    "#GuessTheCharacter",
+    "#GamingTrivia",
+    "#TheLegendofZelda",
+    "#Gaming",
+    "#PixelQuiz",
+    "#SuperMario",
+    "#Link",
+    "#VideoGames",
+    "#Shorts"
+  ],
+  "youtube_status": "SKIPPED_NO_CREDENTIALS",
+  "tiktok_status": "ERROR"
+}

@@ -10,5 +10,77 @@
     "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_194822_wolf_heihachi_solid_snake.mp4",
     "youtube_status": "SKIPPED_NO_CREDENTIALS",
     "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "ekans",
+    "character_ids": [
+      "ekans",
+      "cj",
+      "joker"
+    ],
+    "timestamp": "2026-09-19T20:01:29.746041",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_200100_ekans_cj_joker.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "slowbro",
+    "character_ids": [
+      "slowbro",
+      "sonic",
+      "crash_bandicoot"
+    ],
+    "timestamp": "2026-09-19T20:02:44.663722",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_200215_slowbro_sonic_crash_bandicoot.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "corrin",
+    "character_ids": [
+      "corrin",
+      "nathan_drake",
+      "bayonetta"
+    ],
+    "timestamp": "2026-09-19T20:25:52.905351",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_202527_corrin_nathan_drake_bayonetta.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "psyduck",
+    "character_ids": [
+      "psyduck",
+      "spyro",
+      "lara_croft"
+    ],
+    "timestamp": "2026-09-19T20:34:11.852287",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_203325_psyduck_spyro_lara_croft.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "mario",
+    "character_ids": [
+      "mario",
+      "sonic",
+      "link"
+    ],
+    "timestamp": "2026-09-19T20:38:50.299535",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_203803_mario_sonic_link.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "mario",
+    "character_ids": [
+      "mario",
+      "sonic",
+      "link"
+    ],
+    "timestamp": "2026-09-19T20:51:32.782091",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_205048_mario_sonic_link.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
   }
 ]

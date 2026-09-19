@@ -50,47 +50,67 @@ class AudioEngine:
             reveal_time = round_start + 7.5
             round_end = min((r + 1) * round_duration, duration)
 
-            # Beeps de Cuenta Atrás (a 5.5s y 6.5s de la ronda)
+            # Gentle Countdown Blips (at 5.5s and 6.5s) - soft, pleasant tone
             beep_offsets = [5.5, 6.5]
-            beep_freqs = [740.0, 987.77]  # F#5, B5
+            beep_freqs = [659.25, 880.0]  # E5, A5
             for offset, freq in zip(beep_offsets, beep_freqs):
                 b_time = round_start + offset
                 b_idx = int(b_time * self.sample_rate)
-                b_len = int(0.18 * self.sample_rate)
+                b_len = int(0.12 * self.sample_rate)
                 if b_idx + b_len < num_samples:
-                    t_b = np.linspace(0, 0.18, b_len, endpoint=False)
-                    env = np.exp(-t_b * 18.0)
-                    tone = np.sin(2 * np.pi * freq * t_b) * env * 0.45
+                    t_b = np.linspace(0, 0.12, b_len, endpoint=False)
+                    env = np.exp(-t_b * 25.0)
+                    tone = np.sin(2 * np.pi * freq * t_b) * env * 0.22
                     left[b_idx:b_idx + b_len] += tone
                     right[b_idx:b_idx + b_len] += tone
 
-            # Sonido de Revelación e Impacto en 7.5s de cada ronda
+            # Gentle Reveal Chime / Sparkle (pleasant game discovery stinger, peaceful & calm)
             rev_idx = int(reveal_time * self.sample_rate)
-            boom_len = int(1.8 * self.sample_rate)
-            if rev_idx + boom_len < num_samples:
-                t_boom = np.linspace(0, 1.8, boom_len, endpoint=False)
-                pitch_drop = 100.0 * np.exp(-t_boom * 3.5) + 45.0
-                boom_wave = np.sin(2 * np.pi * pitch_drop * t_boom) * np.exp(-t_boom * 2.8) * 0.60
-                left[rev_idx:rev_idx + boom_len] += boom_wave
-                right[rev_idx:rev_idx + boom_len] += boom_wave
+            chime_len = int(1.2 * self.sample_rate)
+            if rev_idx + chime_len < num_samples:
+                t_chime = np.linspace(0, 1.2, chime_len, endpoint=False)
+                chime = (
+                    0.15 * np.sin(2 * np.pi * 1046.50 * t_chime) * np.exp(-t_chime * 4.0) + # C6
+                    0.15 * np.sin(2 * np.pi * 1318.51 * t_chime) * np.exp(-t_chime * 3.5) + # E6
+                    0.15 * np.sin(2 * np.pi * 1567.98 * t_chime) * np.exp(-t_chime * 3.0) + # G6
+                    0.20 * np.sin(2 * np.pi * 2093.00 * t_chime) * np.exp(-t_chime * 2.5)   # C7
+                )
+                left[rev_idx:rev_idx + chime_len] += chime
+                right[rev_idx:rev_idx + chime_len] += chime
 
-            # Acorde de Victoria (C Mayor para rondas 1 y 2, gran fanfarria para la ronda final)
+            # Harmonious Victory Chord (warm & cozy)
             chord_dur = round_end - reveal_time
             chord_len = int(chord_dur * self.sample_rate)
             chord_end = min(rev_idx + chord_len, num_samples)
             actual_len = chord_end - rev_idx
             if actual_len > 0:
                 t_chord = np.linspace(0, actual_len / self.sample_rate, actual_len, endpoint=False)
-                decay_rate = 0.9 if r < num_rounds - 1 else 0.5
+                decay_rate = 1.0 if r < num_rounds - 1 else 0.6
                 env_chord = np.exp(-t_chord * decay_rate)
                 chord = (
-                    0.25 * np.sin(2 * np.pi * 523.25 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 659.25 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 783.99 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 1046.50 * t_chord)
-                ) * env_chord * 0.50
+                    0.20 * np.sin(2 * np.pi * 523.25 * t_chord) +
+                    0.20 * np.sin(2 * np.pi * 659.25 * t_chord) +
+                    0.20 * np.sin(2 * np.pi * 783.99 * t_chord) +
+                    0.20 * np.sin(2 * np.pi * 1046.50 * t_chord)
+                ) * env_chord * 0.35
                 left[rev_idx:chord_end] += chord
                 right[rev_idx:chord_end] += chord
+
+        # Outro celebration stinger when video has an outro screen
+        rounds_end = num_rounds * round_duration
+        if duration > rounds_end:
+            out_idx = int(rounds_end * self.sample_rate)
+            out_len = int(min(duration - rounds_end, 2.5) * self.sample_rate)
+            if out_idx + out_len <= num_samples:
+                t_out = np.linspace(0, out_len / self.sample_rate, out_len, endpoint=False)
+                fanfare = (
+                    0.15 * np.sin(2 * np.pi * 523.25 * t_out) * np.exp(-t_out * 0.9) +
+                    0.15 * np.sin(2 * np.pi * 659.25 * t_out) * np.exp(-t_out * 0.8) +
+                    0.15 * np.sin(2 * np.pi * 783.99 * t_out) * np.exp(-t_out * 0.7) +
+                    0.20 * np.sin(2 * np.pi * 1046.50 * t_out) * np.exp(-t_out * 0.6)
+                ) * 0.35
+                left[out_idx:out_idx + out_len] += fanfare
+                right[out_idx:out_idx + out_len] += fanfare
 
         # Normalizar
         max_val = max(np.max(np.abs(left)), np.max(np.abs(right)), 1e-5)
@@ -127,8 +147,8 @@ class AudioEngine:
             from moviepy import concatenate_audioclips
             bgm_clip = concatenate_audioclips([bgm_clip] * repeats)
 
-        bgm_sub = bgm_clip.subclipped(0, duration).with_volume_scaled(0.38)
-        sfx_clip = AudioFileClip(str(sfx_temp)).with_volume_scaled(0.95)
+        bgm_sub = bgm_clip.subclipped(0, duration).with_volume_scaled(0.60)
+        sfx_clip = AudioFileClip(str(sfx_temp)).with_volume_scaled(0.40)
 
         composite = CompositeAudioClip([bgm_sub, sfx_clip])
         out_p = Path(output_path)

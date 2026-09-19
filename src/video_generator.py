@@ -29,6 +29,7 @@ from .config import (
     VIDEO_DURATION,
     CHARACTERS_PER_VIDEO,
     ROUND_DURATION,
+    OUTRO_DURATION,
     PHASE_3PTS_END,
     PHASE_2PTS_END,
     PHASE_1PTO_END,
@@ -45,24 +46,31 @@ class VideoGenerator:
         self.duration = VIDEO_DURATION
         self.characters_per_video = CHARACTERS_PER_VIDEO
         self.round_duration = ROUND_DURATION
+        self.outro_duration = OUTRO_DURATION
         self.audio_engine = AudioEngine()
         self._load_fonts()
 
     def _load_fonts(self):
         """Carga fuentes modernas, legibles y de estilo gaming."""
         font_candidates = [
-            ("title", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 52),
-            ("round_badge", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 30),
-            ("subtitle", ["C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/impact.ttf"], 30),
+            ("title", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 50),
+            ("round_badge", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 28),
+            ("subtitle", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 36),
             ("hud_label", ["C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/impact.ttf"], 26),
             ("points_big", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 72),
             ("points_sub", ["C:/Windows/Fonts/arialbd.ttf"], 28),
             ("bar_text", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 28),
-            ("reveal_name", ["C:/Windows/Fonts/impact.ttf"], 60),
-            ("reveal_game", ["C:/Windows/Fonts/arialbd.ttf"], 32),
+            ("reveal_name", ["C:/Windows/Fonts/impact.ttf"], 58),
+            ("reveal_game", ["C:/Windows/Fonts/arialbd.ttf"], 34),
             ("badge", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 26),
             ("cta", ["C:/Windows/Fonts/arialbd.ttf"], 26),
-            ("small", ["C:/Windows/Fonts/arialbd.ttf"], 22)
+            ("small", ["C:/Windows/Fonts/arialbd.ttf"], 22),
+            ("outro_title", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 58),
+            ("outro_card_title", ["C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/impact.ttf"], 30),
+            ("outro_card_big", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 44),
+            ("outro_card_huge", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 56),
+            ("outro_card_sub", ["C:/Windows/Fonts/arialbd.ttf"], 24),
+            ("outro_btn", ["C:/Windows/Fonts/impact.ttf", "C:/Windows/Fonts/arialbd.ttf"], 30)
         ]
 
         self.fonts = {}
@@ -209,6 +217,181 @@ class VideoGenerator:
             anchor=anchor
         )
 
+    def _draw_outro_screen(self, frame, t_outro, num_rounds):
+        """
+        Dibuja la pantalla final de llamada a la acción (Outro):
+        1. Pregunta cuántos puntos ha conseguido e invita a comentar.
+        2. Llama a dar Like, Compartir y Seguir para no perderse los próximos videos.
+        Diseño gaming moderno, limpio, centrado y con márgenes seguros para TikTok/Shorts.
+        """
+        draw = ImageDraw.Draw(frame)
+        total_max_points = num_rounds * 3
+
+        # --- A. TOP PILL: QUIZ COMPLETE! ---
+        pill_w, pill_h = 360, 52
+        pill_x = (self.width - pill_w) // 2
+        pill_y = 190
+        draw.rounded_rectangle(
+            [pill_x, pill_y, pill_x + pill_w, pill_y + pill_h],
+            radius=26,
+            fill=(16, 20, 36, 230),
+            outline=(0, 240, 255),
+            width=2
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, pill_y + pill_h // 2),
+            "QUIZ COMPLETE!",
+            self.fonts["round_badge"],
+            fill_color=(0, 240, 255),
+            outline_width=2
+        )
+
+        # --- B. MAIN TITLE ---
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, 290),
+            "HOW MANY POINTS",
+            self.fonts["outro_title"],
+            fill_color=(255, 255, 255),
+            outline_color=(10, 15, 30),
+            outline_width=4
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, 360),
+            "DID YOU GET?",
+            self.fonts["outro_title"],
+            fill_color=(255, 215, 0),
+            outline_color=(10, 15, 30),
+            outline_width=4
+        )
+
+        # --- C. CARD 1: COMMENTS CALLOUT ---
+        card_w, card_h = 800, 220
+        card_x = (self.width - card_w) // 2
+        card1_y = 440
+        draw.rounded_rectangle(
+            [card_x, card1_y, card_x + card_w, card1_y + card_h],
+            radius=24,
+            fill=(16, 20, 36),
+            outline=(0, 240, 255),
+            width=3
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card1_y + 48),
+            "LEAVE A COMMENT WITH YOUR SCORE!",
+            self.fonts["outro_card_title"],
+            fill_color=(0, 240, 255),
+            outline_width=2
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card1_y + 115),
+            f"DID YOU GET ALL {total_max_points} POINTS?",
+            self.fonts["outro_card_big"],
+            fill_color=(255, 215, 0),
+            outline_width=3
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card1_y + 175),
+            f"Comment 1-{total_max_points} below and challenge your friends!",
+            self.fonts["outro_card_sub"],
+            fill_color=(200, 215, 240),
+            outline_width=2
+        )
+
+        # --- D. ROW OF ACTION BUTTON BADGES ---
+        btn_w = 230
+        btn_h = 66
+        btn_gap = 20
+        total_btns_w = (3 * btn_w) + (2 * btn_gap)
+        btns_start_x = (self.width - total_btns_w) // 2
+        btns_y = 695
+
+        buttons = [
+            ("LIKE", (255, 55, 125), (32, 14, 25)),
+            ("SHARE", (0, 240, 255), (12, 28, 38)),
+            ("FOLLOW", (50, 255, 130), (12, 34, 22))
+        ]
+
+        for i, (label, color, fill_c) in enumerate(buttons):
+            bx1 = btns_start_x + i * (btn_w + btn_gap)
+            bx2 = bx1 + btn_w
+            draw.rounded_rectangle(
+                [bx1, btns_y, bx2, btns_y + btn_h],
+                radius=18,
+                fill=fill_c,
+                outline=color,
+                width=3
+            )
+            self._draw_text_with_outline(
+                draw,
+                ((bx1 + bx2) // 2, btns_y + btn_h // 2),
+                label,
+                self.fonts["outro_btn"],
+                fill_color=color,
+                outline_width=2
+            )
+
+        # --- E. CARD 2: LIKE, SHARE & FOLLOW CALLOUT ---
+        card2_y = 795
+        card2_h = 260
+        draw.rounded_rectangle(
+            [card_x, card2_y, card_x + card_w, card2_y + card2_h],
+            radius=24,
+            fill=(16, 20, 36),
+            outline=(50, 255, 130),
+            width=3
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card2_y + 55),
+            "LIKE & SHARE THIS VIDEO!",
+            self.fonts["outro_card_big"],
+            fill_color=(255, 255, 255),
+            outline_width=3
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card2_y + 130),
+            "FOLLOW US",
+            self.fonts["outro_card_huge"],
+            fill_color=(50, 255, 130),
+            outline_width=4
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, card2_y + 205),
+            "SO YOU DON'T MISS THE NEXT QUIZ!",
+            self.fonts["outro_card_title"],
+            fill_color=(255, 215, 0),
+            outline_width=2
+        )
+
+        # --- F. BOTTOM PILL: NEW VIDEO EVERY DAY! ---
+        banner_w, banner_h = 680, 74
+        banner_x = (self.width - banner_w) // 2
+        banner_y = 1090
+        draw.rounded_rectangle(
+            [banner_x, banner_y, banner_x + banner_w, banner_y + banner_h],
+            radius=22,
+            fill=(16, 20, 36, 230),
+            outline=(255, 215, 0),
+            width=3
+        )
+        self._draw_text_with_outline(
+            draw,
+            (self.width // 2, banner_y + banner_h // 2),
+            "NEW VIDEO EVERY DAY!",
+            self.fonts["subtitle"],
+            fill_color=(255, 215, 0),
+            outline_color=(10, 12, 20),
+            outline_width=3
+        )
+
     def generate_video(self, characters, output_file=None):
         """
         Genera el video completo con 3 personajes, pixelado progresivo,
@@ -221,7 +404,8 @@ class VideoGenerator:
             characters = [characters]
 
         num_rounds = len(characters)
-        total_duration = self.round_duration * num_rounds
+        rounds_duration = self.round_duration * num_rounds
+        total_duration = rounds_duration + self.outro_duration
 
         char_ids = [c["id"] for c in characters]
         char_names = [c["name"] for c in characters]
@@ -239,11 +423,11 @@ class VideoGenerator:
         metadata_file = output_file.with_suffix(".json")
 
         print("\n" + "="*55)
-        print(f"🎮 Generando Video de Adivinanza ({num_rounds} rondas)")
+        print(f"🎮 Generando Video de Adivinanza ({num_rounds} rondas + Outro)")
         for i, c in enumerate(characters, 1):
             print(f"  Ronda {i}: {c['name']} - {c.get('game', '')}")
         print(f"📁 Salida: {output_file.name}")
-        print(f"⏱️ Duración: {total_duration:.1f}s ({self.round_duration:.1f}s por personaje)")
+        print(f"⏱️ Duración: {total_duration:.1f}s ({num_rounds} rondas x {self.round_duration:.1f}s + {self.outro_duration:.1f}s outro)")
         print("="*55)
 
         try:
@@ -262,25 +446,34 @@ class VideoGenerator:
 
             card_w, card_h = 740, 740
             card_x = (self.width - card_w) // 2
-            card_y = 295
+            card_y = 280
 
-            # Función generadora de cuadros por segundo
+            # Generator function per frame
             def make_frame(t):
                 frame = bg_static.copy()
+
+                # Si entramos en la fase final de llamada a la acción (Outro)
+                if t >= rounds_duration:
+                    t_outro = t - rounds_duration
+                    self._draw_outro_screen(frame, t_outro, num_rounds)
+                    return np.array(frame)
+
                 draw = ImageDraw.Draw(frame)
 
                 round_idx = min(int(t // self.round_duration), num_rounds - 1)
                 round_t = t - (round_idx * self.round_duration)
                 char = characters[round_idx]
                 char_name = char["name"]
-                game_name = char.get("game", "")
+                raw_game_name = char.get("game", "")
+                # Strip platform/publisher (e.g. "Pokémon / Nintendo" -> "Pokémon")
+                game_franchise = raw_game_name.split("/")[0].strip() if raw_game_name else "Video Game"
                 char_stages = all_char_stages[round_idx]
 
-                # --- A. ENCABEZADO MINIMALISTA (ESTILO TIKTOK GAMING) ---
-                pill_w, pill_h = 280, 48
+                # --- A. TOP HEADER (CLEAN ENGLISH GAMING STYLE) ---
+                pill_w, pill_h = 300, 48
                 pill_x = (self.width - pill_w) // 2
                 draw.rounded_rectangle(
-                    [pill_x, 130, pill_x + pill_w, 130 + pill_h],
+                    [pill_x, 120, pill_x + pill_w, 120 + pill_h],
                     radius=24,
                     fill=(16, 20, 36, 220),
                     outline=(0, 240, 255),
@@ -288,8 +481,8 @@ class VideoGenerator:
                 )
                 self._draw_text_with_outline(
                     draw,
-                    (self.width // 2, 154),
-                    f"RONDA {round_idx + 1} DE {num_rounds}",
+                    (self.width // 2, 144),
+                    f"ROUND {round_idx + 1} OF {num_rounds}",
                     self.fonts["round_badge"],
                     fill_color=(0, 240, 255),
                     outline_width=2
@@ -297,49 +490,41 @@ class VideoGenerator:
 
                 self._draw_text_with_outline(
                     draw,
-                    (self.width // 2, 220),
-                    "¿QUIÉN ES ESTE PERSONAJE?",
+                    (self.width // 2, 215),
+                    "WHO IS THIS CHARACTER?",
                     self.fonts["title"],
                     fill_color=(255, 255, 255),
                     outline_color=(10, 15, 30),
                     outline_width=4
                 )
 
-                # --- B. FASES DE PIXELADO Y PUNTUACIÓN ---
+                # --- B. PHASES OF PIXELATION AND POINTS ---
                 if round_t < PHASE_3PTS_END:
                     current_img = char_stages["stage_1"]
-                    border_color = (255, 215, 0)  # Oro brillante (3 pts)
-                    badge_label = "[ 3 PTS ]"
-                    pts_label = "+3 PUNTOS"
-                    pts_sub = "¡Pixelado retro máximo! ¿Lo tienes ya?"
+                    border_color = (255, 215, 0)  # Bright Gold (3 pts)
+                    pts_label = "+3 POINTS"
                     active_segment = 0
                     phase_progress = round_t / PHASE_3PTS_END
                 elif round_t < PHASE_2PTS_END:
                     current_img = char_stages["stage_2"]
-                    border_color = (255, 145, 0)  # Naranja neón (2 pts)
-                    badge_label = "[ 2 PTS ]"
-                    pts_label = "+2 PUNTOS"
-                    pts_sub = "¡Gana definición! ¡Aún sumas 2 pts!"
+                    border_color = (255, 145, 0)  # Neon Orange (2 pts)
+                    pts_label = "+2 POINTS"
                     active_segment = 1
                     phase_progress = (round_t - PHASE_3PTS_END) / (PHASE_2PTS_END - PHASE_3PTS_END)
                 elif round_t < PHASE_1PTO_END:
                     current_img = char_stages["stage_3"]
-                    border_color = (255, 55, 125)  # Fucsia arcade (1 pto)
-                    badge_label = "[ 1 PTO ]"
-                    pts_label = "+1 PUNTO"
-                    pts_sub = "¡Casi nítido! ¡Última oportunidad!"
+                    border_color = (255, 55, 125)  # Arcade Magenta (1 pt)
+                    pts_label = "+1 POINT"
                     active_segment = 2
                     phase_progress = (round_t - PHASE_2PTS_END) / (PHASE_1PTO_END - PHASE_2PTS_END)
                 else:
                     current_img = char_stages["stage_4"]
-                    border_color = (50, 255, 130)  # Verde victoria (Revelado / 0 pts)
-                    badge_label = "[ ¡REVELADO! ]"
-                    pts_label = "0 PUNTOS"
-                    pts_sub = "¡Tiempo terminado para puntuar!"
+                    border_color = (50, 255, 130)  # Victory Green (Reveal / 0 pts)
+                    pts_label = "0 POINTS"
                     active_segment = -1
                     phase_progress = 1.0
 
-                # --- C. MARCO DEL PERSONAJE (TARJETA DE CRISTAL TRANSLÚCIDA) ---
+                # --- C. CHARACTER CARD (CLEAN TRANSLUCENT GLASS CARD - NO CORNER BADGE) ---
                 draw.rounded_rectangle(
                     [card_x - 8, card_y - 8, card_x + card_w + 8, card_y + card_h + 8],
                     radius=26,
@@ -349,32 +534,13 @@ class VideoGenerator:
                 )
                 frame.paste(current_img, (card_x + 20, card_y + 20))
 
-                # Insignia de puntos en la esquina superior de la tarjeta
-                badge_w, badge_h = 220, 44
-                badge_x1 = card_x + card_w - badge_w - 20
-                badge_y1 = card_y + 20
-                draw.rounded_rectangle(
-                    [badge_x1, badge_y1, badge_x1 + badge_w, badge_y1 + badge_h],
-                    radius=12,
-                    fill=(10, 12, 22),
-                    outline=border_color,
-                    width=2
-                )
-                self._draw_text_with_outline(
-                    draw,
-                    (badge_x1 + badge_w // 2, badge_y1 + badge_h // 2),
-                    badge_label,
-                    self.fonts["badge"],
-                    fill_color=border_color,
-                    outline_width=2
-                )
-
-                # --- D. PANEL CENTRAL DE PUNTOS O REVELACIÓN (SIN PISTAS) ---
-                hud_y1 = 1065
-                hud_h = 215
+                # --- D. CENTRAL HUD PANEL (POINTS AT STAKE OR REVEAL - 2 CENTERED LINES, NO 3RD LINE, NO >> <<) ---
+                hud_y1 = 1055
+                hud_h = 175
                 hud_y2 = hud_y1 + hud_h
 
                 if round_t < ROUND_REVEAL_START:
+                    # Guessing Phase: 2 vertically centered lines
                     draw.rounded_rectangle(
                         [card_x, hud_y1, card_x + card_w, hud_y2],
                         radius=20,
@@ -384,29 +550,22 @@ class VideoGenerator:
                     )
                     self._draw_text_with_outline(
                         draw,
-                        (self.width // 2, hud_y1 + 42),
-                        "PUNTOS EN JUEGO EN ESTA RONDA:",
+                        (self.width // 2, hud_y1 + 52),
+                        "POINTS AT STAKE:",
                         self.fonts["hud_label"],
                         fill_color=(190, 210, 245),
                         outline_width=2
                     )
                     self._draw_text_with_outline(
                         draw,
-                        (self.width // 2, hud_y1 + 108),
+                        (self.width // 2, hud_y1 + 118),
                         pts_label,
                         self.fonts["points_big"],
                         fill_color=border_color,
                         outline_width=4
                     )
-                    self._draw_text_with_outline(
-                        draw,
-                        (self.width // 2, hud_y1 + 172),
-                        pts_sub,
-                        self.fonts["points_sub"],
-                        fill_color=(255, 255, 255),
-                        outline_width=2
-                    )
                 else:
+                    # Reveal Phase: 2 vertically centered lines (Character & Franchise without platform)
                     draw.rounded_rectangle(
                         [card_x, hud_y1, card_x + card_w, hud_y2],
                         radius=20,
@@ -416,31 +575,23 @@ class VideoGenerator:
                     )
                     self._draw_text_with_outline(
                         draw,
-                        (self.width // 2, hud_y1 + 48),
-                        f">> ¡ES {char_name.upper()}! <<",
+                        (self.width // 2, hud_y1 + 54),
+                        f"IT'S {char_name.upper()}!",
                         self.fonts["reveal_name"],
                         fill_color=(255, 225, 0),
                         outline_width=4
                     )
                     self._draw_text_with_outline(
                         draw,
-                        (self.width // 2, hud_y1 + 118),
-                        f"Saga: {game_name}",
+                        (self.width // 2, hud_y1 + 122),
+                        f"Game: {game_franchise}",
                         self.fonts["reveal_game"],
                         fill_color=(255, 255, 255),
                         outline_width=2
                     )
-                    self._draw_text_with_outline(
-                        draw,
-                        (self.width // 2, hud_y1 + 172),
-                        "¡Ronda finalizada! Prepárate para la siguiente...",
-                        self.fonts["points_sub"],
-                        fill_color=(60, 255, 160),
-                        outline_width=2
-                    )
 
-                # --- E. BARRA DE PUNTOS SEGMENTADA (3 PTS | 2 PTS | 1 PTO | 0 PTS) ---
-                bar_y1 = 1305
+                # --- E. SEGMENTED POINTS BAR (CLEAN POINTS NUMBERS - NO [X], NO X) ---
+                bar_y1 = 1265
                 bar_h = 56
                 bar_y2 = bar_y1 + bar_h
                 seg_gap = 12
@@ -449,7 +600,7 @@ class VideoGenerator:
                 segments_info = [
                     ("3 PTS", (255, 215, 0), (255, 255, 120)),
                     ("2 PTS", (255, 145, 0), (255, 205, 80)),
-                    ("1 PTO", (255, 55, 125), (255, 135, 185))
+                    ("1 PT", (255, 55, 125), (255, 135, 185))
                 ]
 
                 for i, (label, color, glow) in enumerate(segments_info):
@@ -457,7 +608,7 @@ class VideoGenerator:
                     seg_x2 = seg_x1 + seg_w
 
                     if active_segment == i:
-                        # Segmento ACTIVO: lleno con color y timer de vaciado
+                        # ACTIVE segment: filled with glowing color + sweep progress bar
                         draw.rounded_rectangle(
                             [seg_x1, bar_y1, seg_x2, bar_y2],
                             radius=14,
@@ -475,14 +626,14 @@ class VideoGenerator:
                         self._draw_text_with_outline(
                             draw,
                             ((seg_x1 + seg_x2) // 2, (bar_y1 + bar_y2) // 2 - 2),
-                            f"[ {label} ]",
+                            label,
                             self.fonts["bar_text"],
                             fill_color=(10, 12, 20),
                             outline_color=(255, 255, 255),
                             outline_width=1
                         )
                     elif active_segment > i or active_segment == -1:
-                        # Segmento EXPIRADO (0 pts para esta etapa)
+                        # EXPIRED segment (dimmed, clean number, NO [X])
                         draw.rounded_rectangle(
                             [seg_x1, bar_y1, seg_x2, bar_y2],
                             radius=14,
@@ -493,13 +644,13 @@ class VideoGenerator:
                         self._draw_text_with_outline(
                             draw,
                             ((seg_x1 + seg_x2) // 2, (bar_y1 + bar_y2) // 2),
-                            f"{label} [X]",
+                            label,
                             self.fonts["bar_text"],
-                            fill_color=(90, 95, 120),
+                            fill_color=(100, 105, 130),
                             outline_width=1
                         )
                     else:
-                        # Segmento EN ESPERA
+                        # UPCOMING / WAITING segment
                         draw.rounded_rectangle(
                             [seg_x1, bar_y1, seg_x2, bar_y2],
                             radius=14,
@@ -516,12 +667,12 @@ class VideoGenerator:
                             outline_width=1
                         )
 
-                # --- F. MICRO-BARRA DE CUENTA ATRÁS GLOBAL DE LA RONDA ---
-                pbar_y1 = 1380
-                pbar_h = 16
+                # --- F. ROUND COUNTDOWN PROGRESS BAR ---
+                pbar_y1 = 1345
+                pbar_h = 14
                 draw.rounded_rectangle(
                     [card_x, pbar_y1, card_x + card_w, pbar_y1 + pbar_h],
-                    radius=8,
+                    radius=7,
                     fill=(12, 14, 24),
                     outline=(45, 50, 75),
                     width=1
@@ -532,54 +683,41 @@ class VideoGenerator:
                     if fill_w > 8:
                         draw.rounded_rectangle(
                             [card_x, pbar_y1, card_x + fill_w, pbar_y1 + pbar_h],
-                            radius=8,
+                            radius=7,
                             fill=border_color
                         )
                 else:
                     draw.rounded_rectangle(
                         [card_x, pbar_y1, card_x + card_w, pbar_y1 + pbar_h],
-                        radius=8,
+                        radius=7,
                         fill=(50, 255, 130)
                     )
 
-                # --- G. ZONA INFERIOR DE PARTICIPACIÓN ---
+                # --- G. BOTTOM QUESTION (EXCLUSIVELY ONE QUESTION, NO >> <<, NO OTHER LINES) ---
+                cta_w, cta_h = 680, 74
+                cta_x = (self.width - cta_w) // 2
+                cta_y = 1530
+                draw.rounded_rectangle(
+                    [cta_x, cta_y, cta_x + cta_w, cta_y + cta_h],
+                    radius=22,
+                    fill=(16, 20, 36, 230),
+                    outline=(255, 215, 0),
+                    width=3
+                )
                 self._draw_text_with_outline(
                     draw,
-                    (self.width // 2, 1490),
-                    f">> RETO: ¿PUEDES CONSEGUIR {num_rounds * 3} PUNTOS? <<",
+                    (self.width // 2, cta_y + cta_h // 2),
+                    f"CAN YOU GET {num_rounds * 3} POINTS?",
                     self.fonts["subtitle"],
                     fill_color=(255, 215, 0),
+                    outline_color=(10, 12, 20),
                     outline_width=3
-                )
-                self._draw_text_with_outline(
-                    draw,
-                    (self.width // 2, 1550),
-                    ">> ¡COMENTA TU PUNTUACIÓN TOTAL! <<",
-                    self.fonts["title"],
-                    fill_color=(0, 240, 255),
-                    outline_width=3
-                )
-                self._draw_text_with_outline(
-                    draw,
-                    (self.width // 2, 1615),
-                    ">> DALE LIKE Y COMPARTE CON TUS AMIGOS <<",
-                    self.fonts["cta"],
-                    fill_color=(255, 255, 255),
-                    outline_width=2
-                )
-                self._draw_text_with_outline(
-                    draw,
-                    (self.width // 2, 1665),
-                    ">> ¡SÍGUENOS PARA EL PRÓXIMO QUIZ! <<",
-                    self.fonts["cta"],
-                    fill_color=(255, 180, 0),
-                    outline_width=2
                 )
 
                 return np.array(frame)
 
-            # 3. Renderizar video con MoviePy mostrando barra de progreso en vivo
-            print("\n⏳ Renderizando 30s de video en alta definición (progreso en tiempo real)...")
+            # 3. Render video with MoviePy displaying live progress bar
+            print(f"\n⏳ Rendering {total_duration:.1f}s high-definition video (real-time progress)...")
             video_clip = VideoClip(make_frame, duration=total_duration)
             video_clip = video_clip.with_audio(audio_clip)
 
@@ -596,26 +734,26 @@ class VideoGenerator:
             video_clip.close()
             audio_clip.close()
 
-            # Renombrar archivo temporal al definitivo solo tras completar el 100%
+            # Rename temp file to final destination only after 100% completion
             if temp_output.exists():
                 if output_file.exists():
                     output_file.unlink()
                 temp_output.rename(output_file)
 
-            # 4. Generar metadatos para publicación
-            all_tags = set(["#Shorts", "#Gaming", "#AdivinaElPersonaje", "#TikTokQuiz", "#QuizGamer"])
+            # 4. Generate metadata for publishing (English)
+            all_tags = set(["#Shorts", "#Gaming", "#GuessTheCharacter", "#GamerQuiz", "#GamingTrivia", "#PixelQuiz", "#VideoGames"])
             for c in characters:
                 for tag in c.get("tags", []):
                     all_tags.add(tag)
             hashtags_str = " ".join(list(all_tags)[:12])
 
-            char_list_str = "\n".join([f"Ronda {i+1}: {c['name']} ({c.get('game', '')})" for i, c in enumerate(characters)])
+            char_list_str = "\n".join([f"Round {i+1}: {c['name']} ({c.get('game', '').split('/')[0].strip()})" for i, c in enumerate(characters)])
 
             meta = {
-                "title": f"¿Puedes adivinar estos {num_rounds} personajes de videojuegos? Quiz Gamer #Shorts",
-                "description": f"¿Eres un auténtico gamer? Adivina los {num_rounds} personajes ocultos tras los píxeles.\n\nPuntuación máxima: {num_rounds * 3} Pts (3 pts por personaje)\n\n{char_list_str}\n\n{hashtags_str}",
+                "title": f"Can you guess these {num_rounds} video game characters? Gamer Quiz #Shorts",
+                "description": f"Are you a true gamer? Guess the {num_rounds} characters hidden behind the pixels.\n\nMax score: {num_rounds * 3} Points (3 pts per character)\n\n{char_list_str}\n\n{hashtags_str}",
                 "characters": [
-                    {"id": c["id"], "name": c["name"], "game": c.get("game", "")}
+                    {"id": c["id"], "name": c["name"], "game": c.get("game", "").split("/")[0].strip()}
                     for c in characters
                 ],
                 "character_id": characters[0]["id"] if characters else "",

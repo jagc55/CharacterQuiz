@@ -40,10 +40,11 @@ VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 VIDEO_FPS = 30
 
-# Estructura Multi-Personaje (3 personajes por video)
+# Estructura Multi-Personaje (3 personajes por video + Outro final)
 CHARACTERS_PER_VIDEO = 3
 ROUND_DURATION = 10.0  # Duración de cada ronda en segundos
-VIDEO_DURATION = ROUND_DURATION * CHARACTERS_PER_VIDEO  # 30.0s en total
+OUTRO_DURATION = 3.5   # Pantalla final de llamada a la acción en segundos
+VIDEO_DURATION = (ROUND_DURATION * CHARACTERS_PER_VIDEO) + OUTRO_DURATION  # 33.5s en total
 
 # Fases de puntuación y pixelado por ronda (en segundos de 0.0 a 10.0)
 PHASE_3PTS_END = 2.5       # 0.0s - 2.5s: Pixelado alto -> 3 PUNTOS

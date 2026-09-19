@@ -143,6 +143,11 @@ class CharacterManager:
             if chosen in available:
                 available.remove(chosen)
 
+        # Asegurar que todos los seleccionados (incluyendo forzados por CLI) tengan su imagen descargada y válida
+        for c in selected:
+            if "image_path" not in c or not Path(c.get("image_path", "")).exists():
+                self._ensure_character_image(c)
+
         return selected
 
     def get_next_character(self, force_id=None):
