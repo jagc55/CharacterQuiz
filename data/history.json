@@ -82,5 +82,41 @@
     "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_205048_mario_sonic_link.mp4",
     "youtube_status": "SKIPPED_NO_CREDENTIALS",
     "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "mario",
+    "character_ids": [
+      "mario",
+      "sonic",
+      "link"
+    ],
+    "timestamp": "2026-09-19T23:12:07.389379",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_231143_mario_sonic_link.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "mario",
+    "character_ids": [
+      "mario",
+      "sonic",
+      "link"
+    ],
+    "timestamp": "2026-09-19T23:45:52.886530",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_234513_mario_sonic_link.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "mario",
+    "character_ids": [
+      "mario",
+      "sonic",
+      "link"
+    ],
+    "timestamp": "2026-09-19T23:58:15.509266",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_235730_mario_sonic_link.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
   }
 ]

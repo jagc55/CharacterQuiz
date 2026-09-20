@@ -49,6 +49,7 @@ class VideoGenerator:
         self.outro_duration = OUTRO_DURATION
         self.audio_engine = AudioEngine()
         self._load_fonts()
+        self._init_icons()
 
     def _load_fonts(self):
         """Carga fuentes modernas, legibles y de estilo gaming."""
@@ -217,6 +218,58 @@ class VideoGenerator:
             anchor=anchor
         )
 
+    def _init_icons(self):
+        """Genera los iconos antialiased en alta resolución para los botones de interacción rápida."""
+        self.icon_heart = self._make_heart_icon(34)
+        self.icon_share = self._make_share_icon(34, (0, 240, 255))
+        self.icon_follow = self._make_follow_icon(34, (50, 255, 130))
+
+    def _make_heart_icon(self, size=34):
+        s = size * 4
+        hi = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+        d = ImageDraw.Draw(hi)
+        r = int(s * 0.29)
+        cx1 = int(s * 0.31)
+        cx2 = int(s * 0.69)
+        cy = int(s * 0.35)
+        d.ellipse([cx1 - r, cy - r, cx1 + r, cy + r], fill=(255, 45, 100, 255))
+        d.ellipse([cx2 - r, cy - r, cx2 + r, cy + r], fill=(255, 45, 100, 255))
+        poly = [(int(s * 0.05), int(s * 0.42)), (int(s * 0.95), int(s * 0.42)), (int(s * 0.5), int(s * 0.94))]
+        d.polygon(poly, fill=(255, 45, 100, 255))
+        hr = int(r * 0.45)
+        d.ellipse([cx1 - int(r*0.4) - hr, cy - int(r*0.3) - hr, cx1 - int(r*0.4) + hr, cy - int(r*0.3) + hr], fill=(255, 160, 190, 200))
+        return hi.resize((size, size), Image.Resampling.LANCZOS)
+
+    def _make_share_icon(self, size=34, color=(0, 240, 255)):
+        s = size * 4
+        si = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+        d = ImageDraw.Draw(si)
+        arrowhead = [(int(s * 0.94), int(s * 0.20)), (int(s * 0.56), int(s * 0.12)), (int(s * 0.70), int(s * 0.36))]
+        d.polygon(arrowhead, fill=color)
+        arrowhead2 = [(int(s * 0.94), int(s * 0.20)), (int(s * 0.84), int(s * 0.58)), (int(s * 0.70), int(s * 0.36))]
+        d.polygon(arrowhead2, fill=color)
+        d.arc([int(s * 0.10), int(s * 0.36), int(s * 0.76), int(s * 0.94)], start=160, end=320, fill=color, width=int(s * 0.15))
+        d.line([(int(s * 0.50), int(s * 0.42)), (int(s * 0.74), int(s * 0.28))], fill=color, width=int(s * 0.15))
+        return si.resize((size, size), Image.Resampling.LANCZOS)
+
+    def _make_follow_icon(self, size=34, color=(50, 255, 130)):
+        s = size * 4
+        fi = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+        d = ImageDraw.Draw(fi)
+        hr = int(s * 0.19)
+        hcx = int(s * 0.35)
+        hcy = int(s * 0.32)
+        d.ellipse([hcx - hr, hcy - hr, hcx + hr, hcy + hr], fill=color)
+        tw = int(s * 0.33)
+        d.chord([hcx - tw, int(s * 0.54), hcx + tw, int(s * 0.96)], start=180, end=360, fill=color)
+        px = int(s * 0.78)
+        py = int(s * 0.46)
+        plen = int(s * 0.18)
+        pw = int(s * 0.10)
+        d.line([(px - plen, py), (px + plen, py)], fill=color, width=pw)
+        d.line([(px, py - plen), (px, py + plen)], fill=color, width=pw)
+        return fi.resize((size, size), Image.Resampling.LANCZOS)
+
     def _draw_outro_screen(self, frame, t_outro, num_rounds):
         """
         Dibuja la pantalla final de llamada a la acción (Outro):
@@ -303,21 +356,21 @@ class VideoGenerator:
             outline_width=2
         )
 
-        # --- D. ROW OF ACTION BUTTON BADGES ---
-        btn_w = 230
-        btn_h = 66
-        btn_gap = 20
+        # --- D. ROW OF ACTION BUTTON BADGES WITH ICONS ---
+        btn_w = 240
+        btn_h = 68
+        btn_gap = 18
         total_btns_w = (3 * btn_w) + (2 * btn_gap)
         btns_start_x = (self.width - total_btns_w) // 2
         btns_y = 695
 
         buttons = [
-            ("LIKE", (255, 55, 125), (32, 14, 25)),
-            ("SHARE", (0, 240, 255), (12, 28, 38)),
-            ("FOLLOW", (50, 255, 130), (12, 34, 22))
+            ("LIKE", (255, 55, 125), (34, 14, 26), self.icon_heart),
+            ("SHARE", (0, 240, 255), (12, 28, 38), self.icon_share),
+            ("FOLLOW", (50, 255, 130), (12, 34, 22), self.icon_follow)
         ]
 
-        for i, (label, color, fill_c) in enumerate(buttons):
+        for i, (label, color, fill_c, icon) in enumerate(buttons):
             bx1 = btns_start_x + i * (btn_w + btn_gap)
             bx2 = bx1 + btn_w
             draw.rounded_rectangle(
@@ -327,9 +380,21 @@ class VideoGenerator:
                 outline=color,
                 width=3
             )
+
+            bbox = self.fonts["outro_btn"].getbbox(label)
+            tw = bbox[2] - bbox[0]
+            gap = 12
+            content_w = icon.width + gap + tw
+            start_cx = bx1 + (btn_w - content_w) // 2
+            icon_cy = btns_y + (btn_h - icon.height) // 2
+
+            frame.paste(icon, (start_cx, icon_cy), icon)
+
+            text_x = start_cx + icon.width + gap + (tw // 2)
+            text_y = btns_y + (btn_h // 2)
             self._draw_text_with_outline(
                 draw,
-                ((bx1 + bx2) // 2, btns_y + btn_h // 2),
+                (text_x, text_y),
                 label,
                 self.fonts["outro_btn"],
                 fill_color=color,

@@ -42,15 +42,15 @@ VIDEO_FPS = 30
 
 # Estructura Multi-Personaje (3 personajes por video + Outro final)
 CHARACTERS_PER_VIDEO = 3
-ROUND_DURATION = 10.0  # Duración de cada ronda en segundos
+ROUND_DURATION = 14.5  # 12.0s de adivinanza (4s por fase) + 2.5s de revelación
 OUTRO_DURATION = 3.5   # Pantalla final de llamada a la acción en segundos
-VIDEO_DURATION = (ROUND_DURATION * CHARACTERS_PER_VIDEO) + OUTRO_DURATION  # 33.5s en total
+VIDEO_DURATION = (ROUND_DURATION * CHARACTERS_PER_VIDEO) + OUTRO_DURATION  # 47.0s en total
 
-# Fases de puntuación y pixelado por ronda (en segundos de 0.0 a 10.0)
-PHASE_3PTS_END = 2.5       # 0.0s - 2.5s: Pixelado alto -> 3 PUNTOS
-PHASE_2PTS_END = 5.0       # 2.5s - 5.0s: Pixelado medio -> 2 PUNTOS
-PHASE_1PTO_END = 7.5       # 5.0s - 7.5s: Pixelado leve -> 1 PUNTO
-ROUND_REVEAL_START = 7.5   # 7.5s - 10.0s: Revelación nítida -> 0 PUNTOS (Tiempo finalizado)
+# Fases de puntuación y pixelado por ronda (en segundos de 0.0 a 14.5)
+PHASE_3PTS_END = 4.0       # 0.0s - 4.0s: Pixelado alto -> 3 PUNTOS
+PHASE_2PTS_END = 8.0       # 4.0s - 8.0s: Pixelado medio -> 2 PUNTOS
+PHASE_1PTO_END = 12.0      # 8.0s - 12.0s: Pixelado leve -> 1 PUNTO
+ROUND_REVEAL_START = 12.0  # 12.0s - 14.5s: Revelación nítida + alarma tradicional -> 0 PUNTOS
 
 # Programación de subidas automáticas (cada 4 horas)
 SCHEDULE_INTERVAL_HOURS = int(os.getenv("SCHEDULE_INTERVAL_HOURS", 4))

@@ -1,10 +1,27 @@
 import os
+import sys
 import random
 import wave
 import numpy as np
 from pathlib import Path
+
+# Configurar salida UTF-8 en Windows
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 from moviepy import AudioFileClip, CompositeAudioClip
-from .config import AUDIO_DIR, BGM_DIR, VIDEO_DURATION, CHARACTERS_PER_VIDEO, ROUND_DURATION
+from .config import (
+    AUDIO_DIR,
+    BGM_DIR,
+    VIDEO_DURATION,
+    CHARACTERS_PER_VIDEO,
+    ROUND_DURATION,
+    ROUND_REVEAL_START
+)
 
 class AudioEngine:
     def __init__(self, sample_rate=44100):
@@ -30,7 +47,7 @@ class AudioEngine:
         if bgm_files:
             try:
                 selected_bgm = random.choice(bgm_files)
-                print(f"🎵 Música de fondo seleccionada (sin copyright): {selected_bgm.name}")
+                print(f"[Audio] Música de fondo seleccionada (sin copyright): {selected_bgm.name}")
                 return self._mix_bgm_with_sfx(selected_bgm, duration, output_path, num_rounds, round_duration)
             except Exception as e:
                 print(f"Aviso: No se pudo mezclar BGM externa ({e}). Generando pista sintética...")
@@ -39,80 +56,108 @@ class AudioEngine:
         self._synthesize_full_track(duration, output_path, num_rounds=num_rounds, round_duration=round_duration)
         return str(output_path)
 
+    def _generate_clock_tick(self, is_tock=False):
+        """Genera un tic/tac mecánico y nítido de cronómetro/reloj analógico."""
+        dur = 0.035
+        n = int(self.sample_rate * dur)
+        t = np.linspace(0, dur, n, endpoint=False)
+        f1 = 1950.0 if not is_tock else 1450.0
+        f2 = 3300.0 if not is_tock else 2700.0
+        click1 = (np.sin(2 * np.pi * f1 * t) * 0.65 + np.sin(2 * np.pi * f2 * t) * 0.35) * np.exp(-t * 180.0)
+        delay_samples = int(0.003 * self.sample_rate)
+        click2 = np.zeros(n)
+        t_del = t[:-delay_samples]
+        click2[delay_samples:] = (np.sin(2 * np.pi * (f1 * 1.1) * t_del) * 0.4) * np.exp(-t_del * 220.0)
+        noise = np.random.normal(0, 0.08, n) * np.exp(-t * 260.0)
+        out = (click1 + click2 + noise)
+        return (out / max(np.max(np.abs(out)), 1e-5) * 0.32).astype(np.float32)
+
+    def _generate_analog_alarm_bell(self, duration=1.4):
+        """Genera el repiqueteo metálico característico de un despertador analógico de doble campana."""
+        num_samples = int(self.sample_rate * duration)
+        out = np.zeros(num_samples, dtype=np.float32)
+        strike_freq = 22.0
+        num_strikes = int(duration * strike_freq)
+        f0_bell1 = 2180.0
+        modes1 = [f0_bell1 * 1.0, f0_bell1 * 1.58, f0_bell1 * 2.15, f0_bell1 * 2.75]
+        f0_bell2 = 2520.0
+        modes2 = [f0_bell2 * 1.0, f0_bell2 * 1.58, f0_bell2 * 2.15, f0_bell2 * 2.75]
+        strike_dur = 0.075
+        strike_samples = int(strike_dur * self.sample_rate)
+        t_s = np.linspace(0, strike_dur, strike_samples, endpoint=False)
+        for s in range(num_strikes):
+            t_start = s / strike_freq
+            idx_start = int(t_start * self.sample_rate)
+            if idx_start + strike_samples >= num_samples:
+                break
+            modes = modes1 if s % 2 == 0 else modes2
+            bell_hit = (
+                0.50 * np.sin(2 * np.pi * modes[0] * t_s) * np.exp(-t_s * 40.0) +
+                0.28 * np.sin(2 * np.pi * modes[1] * t_s) * np.exp(-t_s * 60.0) +
+                0.15 * np.sin(2 * np.pi * modes[2] * t_s) * np.exp(-t_s * 85.0) +
+                0.07 * np.sin(2 * np.pi * modes[3] * t_s) * np.exp(-t_s * 110.0)
+            )
+            clatter = np.random.uniform(-1, 1, strike_samples) * np.exp(-t_s * 350.0) * 0.2
+            env = 1.0 if s < num_strikes - 4 else (num_strikes - s) / 4.0
+            out[idx_start:idx_start + strike_samples] += (bell_hit + clatter) * env
+        return (out / max(np.max(np.abs(out)), 1e-5) * 0.60).astype(np.float32)
+
+    def _get_traditional_alarm_sound(self):
+        """Obtiene el sonido real de un despertador analógico metálico tradicional (doble campana)."""
+        alarm_wav_path = AUDIO_DIR / "sfx" / "alarm_clock_ring.wav"
+        if alarm_wav_path.exists():
+            try:
+                with wave.open(str(alarm_wav_path), 'rb') as wf:
+                    w_nch = wf.getnchannels()
+                    w_frames = wf.readframes(wf.getnframes())
+                    raw_sig = np.frombuffer(w_frames, dtype=np.int16).astype(np.float32) / 32767.0
+                    if w_nch == 2:
+                        raw_sig = raw_sig.reshape(-1, 2)
+                        return raw_sig[:, 0], raw_sig[:, 1]
+                    else:
+                        return raw_sig, raw_sig
+            except Exception as e:
+                print(f"Aviso: Error cargando {alarm_wav_path} ({e}), usando respaldo sintetizado.")
+
+        synth = self._generate_analog_alarm_bell(duration=1.6)
+        return synth, synth
+
     def _synthesize_sfx_track(self, duration, num_rounds, round_duration, output_path):
-        """Genera únicamente los efectos de sonido (beeps de aviso y stingers de revelación)."""
+        """Genera los efectos de sonido: reloj/cronómetro durante el temporizador y despertador analógico tradicional al finalizar."""
         num_samples = int(self.sample_rate * duration)
         left = np.zeros(num_samples, dtype=np.float32)
         right = np.zeros(num_samples, dtype=np.float32)
 
+        tick = self._generate_clock_tick(is_tock=False)
+        tock = self._generate_clock_tick(is_tock=True)
+        alarm_left, alarm_right = self._get_traditional_alarm_sound()
+
         for r in range(num_rounds):
             round_start = r * round_duration
-            reveal_time = round_start + 7.5
-            round_end = min((r + 1) * round_duration, duration)
+            reveal_time = round_start + ROUND_REVEAL_START
 
-            # Gentle Countdown Blips (at 5.5s and 6.5s) - soft, pleasant tone
-            beep_offsets = [5.5, 6.5]
-            beep_freqs = [659.25, 880.0]  # E5, A5
-            for offset, freq in zip(beep_offsets, beep_freqs):
-                b_time = round_start + offset
-                b_idx = int(b_time * self.sample_rate)
-                b_len = int(0.12 * self.sample_rate)
-                if b_idx + b_len < num_samples:
-                    t_b = np.linspace(0, 0.12, b_len, endpoint=False)
-                    env = np.exp(-t_b * 25.0)
-                    tone = np.sin(2 * np.pi * freq * t_b) * env * 0.22
-                    left[b_idx:b_idx + b_len] += tone
-                    right[b_idx:b_idx + b_len] += tone
+            # 1. Reloj / Cronómetro mientras baja la barra del temporizador (cada 0.5s hasta reveal_time)
+            num_ticks = int(ROUND_REVEAL_START / 0.5)
+            for i in range(1, num_ticks):
+                t_tick = round_start + (i * 0.5)
+                if t_tick >= reveal_time:
+                    break
+                t_idx = int(t_tick * self.sample_rate)
+                snd = tock if (i % 2 == 0) else tick
+                snd_len = len(snd)
+                if t_idx + snd_len < num_samples:
+                    left[t_idx:t_idx + snd_len] += snd
+                    right[t_idx:t_idx + snd_len] += snd
 
-            # Gentle Reveal Chime / Sparkle (pleasant game discovery stinger, peaceful & calm)
+            # 2. Despertador analógico metálico tradicional al llegar al final del tiempo (12s)
             rev_idx = int(reveal_time * self.sample_rate)
-            chime_len = int(1.2 * self.sample_rate)
-            if rev_idx + chime_len < num_samples:
-                t_chime = np.linspace(0, 1.2, chime_len, endpoint=False)
-                chime = (
-                    0.15 * np.sin(2 * np.pi * 1046.50 * t_chime) * np.exp(-t_chime * 4.0) + # C6
-                    0.15 * np.sin(2 * np.pi * 1318.51 * t_chime) * np.exp(-t_chime * 3.5) + # E6
-                    0.15 * np.sin(2 * np.pi * 1567.98 * t_chime) * np.exp(-t_chime * 3.0) + # G6
-                    0.20 * np.sin(2 * np.pi * 2093.00 * t_chime) * np.exp(-t_chime * 2.5)   # C7
-                )
-                left[rev_idx:rev_idx + chime_len] += chime
-                right[rev_idx:rev_idx + chime_len] += chime
+            bell_len = min(len(alarm_left), num_samples - rev_idx)
+            if rev_idx < num_samples and bell_len > 0:
+                left[rev_idx:rev_idx + bell_len] += alarm_left[:bell_len] * 0.75
+                right[rev_idx:rev_idx + bell_len] += alarm_right[:bell_len] * 0.75
 
-            # Harmonious Victory Chord (warm & cozy)
-            chord_dur = round_end - reveal_time
-            chord_len = int(chord_dur * self.sample_rate)
-            chord_end = min(rev_idx + chord_len, num_samples)
-            actual_len = chord_end - rev_idx
-            if actual_len > 0:
-                t_chord = np.linspace(0, actual_len / self.sample_rate, actual_len, endpoint=False)
-                decay_rate = 1.0 if r < num_rounds - 1 else 0.6
-                env_chord = np.exp(-t_chord * decay_rate)
-                chord = (
-                    0.20 * np.sin(2 * np.pi * 523.25 * t_chord) +
-                    0.20 * np.sin(2 * np.pi * 659.25 * t_chord) +
-                    0.20 * np.sin(2 * np.pi * 783.99 * t_chord) +
-                    0.20 * np.sin(2 * np.pi * 1046.50 * t_chord)
-                ) * env_chord * 0.35
-                left[rev_idx:chord_end] += chord
-                right[rev_idx:chord_end] += chord
-
-        # Outro celebration stinger when video has an outro screen
-        rounds_end = num_rounds * round_duration
-        if duration > rounds_end:
-            out_idx = int(rounds_end * self.sample_rate)
-            out_len = int(min(duration - rounds_end, 2.5) * self.sample_rate)
-            if out_idx + out_len <= num_samples:
-                t_out = np.linspace(0, out_len / self.sample_rate, out_len, endpoint=False)
-                fanfare = (
-                    0.15 * np.sin(2 * np.pi * 523.25 * t_out) * np.exp(-t_out * 0.9) +
-                    0.15 * np.sin(2 * np.pi * 659.25 * t_out) * np.exp(-t_out * 0.8) +
-                    0.15 * np.sin(2 * np.pi * 783.99 * t_out) * np.exp(-t_out * 0.7) +
-                    0.20 * np.sin(2 * np.pi * 1046.50 * t_out) * np.exp(-t_out * 0.6)
-                ) * 0.35
-                left[out_idx:out_idx + out_len] += fanfare
-                right[out_idx:out_idx + out_len] += fanfare
-
-        # Normalizar
+        # En la pantalla final (Outro) NO se reproduce ningún sonido de fin ni alarma
+        # Normalizar si es necesario
         max_val = max(np.max(np.abs(left)), np.max(np.abs(right)), 1e-5)
         if max_val > 0.95:
             left = (left / max_val) * 0.92
@@ -180,9 +225,13 @@ class AudioEngine:
 
         beat_interval = 60.0 / 130.0  # 130 BPM
 
+        alarm_left, alarm_right = self._get_traditional_alarm_sound()
+        tick = self._generate_clock_tick(is_tock=False)
+        tock = self._generate_clock_tick(is_tock=True)
+
         for r in range(num_rounds):
             round_start = r * round_duration
-            reveal_time = round_start + 7.5
+            reveal_time = round_start + ROUND_REVEAL_START
             round_end = min((r + 1) * round_duration, duration)
 
             tension_duration = reveal_time - round_start
@@ -211,46 +260,25 @@ class AudioEngine:
                     left[off_sample:off_sample + tick_len] += noise
                     right[off_sample:off_sample + tick_len] += noise
 
-            # Beeps
-            beep_offsets = [5.5, 6.5]
-            beep_freqs = [659.25, 880.0]
-            for offset, freq in zip(beep_offsets, beep_freqs):
-                b_time = round_start + offset
-                b_idx = int(b_time * self.sample_rate)
-                b_len = int(0.18 * self.sample_rate)
-                if b_idx + b_len < num_samples:
-                    t_b = np.linspace(0, 0.18, b_len, endpoint=False)
-                    env = np.exp(-t_b * 16.0)
-                    tone = np.sin(2 * np.pi * freq * t_b) * env * 0.38
-                    left[b_idx:b_idx + b_len] += tone
-                    right[b_idx:b_idx + b_len] += tone
+            # Reloj / Cronómetro mientras baja la barra (cada 0.5s)
+            num_ticks = int(ROUND_REVEAL_START / 0.5)
+            for i in range(1, num_ticks):
+                t_tick = round_start + (i * 0.5)
+                if t_tick >= reveal_time:
+                    break
+                t_idx = int(t_tick * self.sample_rate)
+                snd = tock if (i % 2 == 0) else tick
+                snd_len = len(snd)
+                if t_idx + snd_len < num_samples:
+                    left[t_idx:t_idx + snd_len] += snd
+                    right[t_idx:t_idx + snd_len] += snd
 
-            # Revelación e Impacto
+            # Despertador analógico metálico tradicional al llegar a los 15s
             rev_idx = int(reveal_time * self.sample_rate)
-            boom_len = int(2.0 * self.sample_rate)
-            if rev_idx + boom_len < num_samples:
-                t_boom = np.linspace(0, 2.0, boom_len, endpoint=False)
-                pitch_drop = 95.0 * np.exp(-t_boom * 3.0) + 40.0
-                boom_wave = np.sin(2 * np.pi * pitch_drop * t_boom) * np.exp(-t_boom * 2.5) * 0.55
-                left[rev_idx:rev_idx + boom_len] += boom_wave
-                right[rev_idx:rev_idx + boom_len] += boom_wave
-
-            chord_dur = round_end - reveal_time
-            chord_len = int(chord_dur * self.sample_rate)
-            chord_end = min(rev_idx + chord_len, num_samples)
-            actual_len = chord_end - rev_idx
-            if actual_len > 0:
-                t_chord = np.linspace(0, actual_len / self.sample_rate, actual_len, endpoint=False)
-                decay_rate = 0.8 if r < num_rounds - 1 else 0.5
-                env_chord = np.exp(-t_chord * decay_rate)
-                chord = (
-                    0.25 * np.sin(2 * np.pi * 523.25 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 659.25 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 783.99 * t_chord) +
-                    0.25 * np.sin(2 * np.pi * 1046.50 * t_chord)
-                ) * env_chord * 0.45
-                left[rev_idx:chord_end] += chord
-                right[rev_idx:chord_end] += chord
+            bell_len = min(len(alarm_left), num_samples - rev_idx)
+            if rev_idx < num_samples and bell_len > 0:
+                left[rev_idx:rev_idx + bell_len] += alarm_left[:bell_len] * 0.75
+                right[rev_idx:rev_idx + bell_len] += alarm_right[:bell_len] * 0.75
 
         max_val = max(np.max(np.abs(left)), np.max(np.abs(right)), 1e-5)
         if max_val > 0.95:
