@@ -1,55 +1,79 @@
-# 🎮 Adivina el Personaje de Videojuegos (TikTok & YouTube Shorts)
+# CharacterQuiz: Generador Automático de Videos para TikTok & YouTube Shorts
 
-*Idiomas: [English](README.md) | [Español](README_es.md)*
+[![Versión Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
+[![Plataforma](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/jagc55/CharacterQuiz)
+[![Formato Video](https://img.shields.io/badge/video%20format-9%3A16%20%281080x1920%29-purple.svg)](https://github.com/jagc55/CharacterQuiz)
+[![Caso de Estudio Portfolio](https://img.shields.io/badge/Portfolio-Caso%20de%20Estudio%20T%C3%A9cnico-success.svg?logo=markdown)](PORTFOLIO_es.md)
 
-Sistema automatizado en **Python** para la generación y publicación periódica (cada 4 horas) de videos verticales estilo Shorts / TikTok de **"Adivina el personaje"**. 
+*Idiomas: [English](README.md) | [Español](README_es.md) • Caso de estudio para Portfolio: [Español](PORTFOLIO_es.md) | [English](PORTFOLIO.md)*
 
-El video presenta a un personaje icónico de videojuegos fuertemente difuminado que va perdiendo el desenfoque en distintas fases conforme avanza el tiempo y se muestran pistas, culminando con una revelación nítida, fanfarria y llamada a la acción para maximizar comentarios y retención.
+**CharacterQuiz** es un sistema completamente automatizado en **Python** para la generación, programación y publicación periódica (cada 4 horas) de videos verticales de alta retención (9:16, 1080x1920 a 30 FPS) para **TikTok** y **YouTube Shorts**.
+
+El video presenta un formato gamificado de adivinanza de videojuegos: una **pantalla de introducción con gancho en inglés**, **transiciones cinemáticas neón gaming**, **3 personajes por video con pixelado retro progresivo** (3 PTS → 2 PTS → 1 PTO → Revelación Full HD), y una **pantalla final interactiva (Outro)** diseñada para disparar los comentarios, likes y suscripciones.
 
 ---
 
-## 📁 Carpeta de Salida Obligatoria
+## Carpeta de Salida Obligatoria (`Blurred_characters/`)
 
-Todos los videos generados y sus metadatos asociados se guardan en la raíz del proyecto dentro de la carpeta:
+Todos los videos `.mp4` generados y sus archivos `.json` de metadatos asociados se guardan automáticamente en la carpeta raíz del proyecto:
 ```
 Blurred_characters/
-├── quiz_20260919_053253_mario.mp4
-├── quiz_20260919_053253_mario.json
-├── quiz_20260919_053421_kratos.mp4
-└── quiz_20260919_053421_kratos.json
+├── quiz_20261021_145706_cloyster_pacman_raiden_mk.mp4
+└── quiz_20261021_145706_cloyster_pacman_raiden_mk.json
 ```
-Cada video `.mp4` viene acompañado de un archivo `.json` con:
-- Título sugerido optimizado para SEO
-- Descripción con hashtags (`#Shorts`, `#Gaming`, `#AdivinaElPersonaje`, etc.)
-- Nombre del personaje y saga
-- Estado de publicación en redes sociales
+
+Cada video viene acompañado de un archivo `.json` con:
+- Título sugerido optimizado para viralidad y SEO
+- Descripción con hashtags en tendencia (`#Shorts`, `#Gaming`, `#QuizGamer`, `#VideoGames`, etc.)
+- Desglose por rondas de personajes, franquicias y plataformas
+- Fondo temático utilizado y estado de subida a redes (YouTube y TikTok)
 
 ---
 
-## ⏱️ Dinámica del Video (13 Segundos, Formato 9:16)
+## Estructura del Video (Formato de 50.5 Segundos para Alta Retención)
 
-1. **0.0s – 3.5s (Fase 1 - Difuminado 100%)**:
-   - Marco neón cyberpunk con fondo contrastado.
-   - Pista 1: *"¿Reconoces los colores del personaje?"*.
-   - Música de suspense con ritmo ascendente.
-2. **3.5s – 6.5s (Fase 2 - Difuminado 50%)**:
-   - Se reduce el desenfoque a la mitad, revelando la silueta básica.
-   - Pista 2: Datos clave del personaje (año de lanzamiento, historia o creador).
-3. **6.5s – 9.0s (Fase 3 - Cuenta Atrás & Difuminado 20%)**:
-   - El difuminado se reduce al 20%, los detalles principales son visibles.
-   - Cuenta atrás de tensión en pantalla: `3... 2... 1...` con beeps ascendentes.
-   - Barra de tiempo inferior agotándose.
-4. **9.0s – 13.0s (Fase 4 - ¡Revelación!)**:
-   - Desenfoque al 0% (imagen totalmente nítida y en alta definición).
-   - Acorde triunfal de victoria / fanfarria e impacto de bajo.
-   - Anuncio destacado: `>> ¡ES [NOMBRE]! <<` y su saga.
-   - Llamada a la acción: *"¿Lo adivinaste? ¡Comenta en qué segundo!"*.
+Cada video está optimizado en 5 fases estratégicas diseñadas para maximizar la tasa de finalización algorítmica (< 60s):
+
+```
+[Pantalla Intro: 2.5s] -> [Transición: 0.5s] -> [Ronda 1: 14.5s] -> [Ronda 2: 14.5s] -> [Ronda 3: 14.5s] -> [Transición: 0.5s] -> [Outro & CTA: 3.5s]
+```
+
+### 1. Pantalla de Introducción (0.0s – 2.5s)
+- **Badge superior:** `VIDEO GAME CHALLENGE`
+- **Texto de gancho (100% en inglés):**
+ > **CAN YOU GUESS** 
+ > **THE FOLLOWING** 
+ > **VIDEO GAME CHARACTERS?**
+- **3 Cajas de botín misteriosas:** Vista previa visual de las Rondas 1 (Oro), 2 (Cian) y 3 (Magenta) con signos de interrogación `?` luminosos.
+- **Reglas y puntuación:** *"3 CHARACTERS • 9 POINTS MAX • Guess before the pixels fully clear! The faster you guess, the more points you get!"*
+- **Desafío para retención:** *"ARE YOU A TRUE GAMER? CAN YOU SCORE 9/9 POINTS?"*
+- **Llamada de arranque:** *"GET READY TO PLAY!"*
+
+### 2. Transiciones Cinemáticas Neón (2x 0.5s)
+- **Push Slide Cúbico Hermite:** Desplazamiento fluido donde la pantalla saliente se desliza hacia la izquierda y la entrante ingresa por la derecha con aceleración/desaceleración *smoothstep*.
+- **Haz de Energía Neón Láser:** Una línea vertical cian y blanca separa las escenas con resplandor difuminado y destello sutil de impacto.
+- **SFX Sincronizado:** Efecto sonoro de barrido cinemático (*whoosh*) sintetizado e integrado en la pista de audio.
+- **Misma Transición Consistente:** Se utiliza idénticamente al pasar de la **Intro al Minijuego** y del **Minijuego a la Pantalla Final (Outro)**.
+
+### 3. Minijuego de Adivinanza (3 rondas x 14.5s = 43.5s)
+| Ventana de Tiempo (por ronda) | Fase de Puntuación | Experiencia Visual y Sonora |
+| :--- | :--- | :--- |
+| **0.0s – 4.0s** | **Fase 1: +3 PUNTOS** | Pixelado retro alto (35px). Misterio total. Sonido sutil de tic-tac de reloj analógico. HUD dorado. |
+| **4.0s – 8.0s** | **Fase 2: +2 PUNTOS** | Pixelado medio (18px). Se revelan la silueta general y paleta de colores. HUD naranja neón. |
+| **8.0s – 12.0s** | **Fase 3: +1 PUNTO** | Pixelado leve (8px). Cuenta atrás con beeps sonoros ascendentes y barra de tiempo agotándose. HUD magenta. |
+| **12.0s – 14.5s** | **Revelación: 0 PUNTOS** | **Desenfoque al 0% (Full HD Nítido)**. Campana de alarma analógica y fanfarria. Cartel: `IT'S [NOMBRE]!` con su videojuego. |
+
+### 4. Pantalla de Cierre Interactiva / Outro (47.0s – 50.5s)
+- **Tarjeta de Puntuación:** *"HOW MANY POINTS DID YOU GET? DID YOU GET ALL 9 POINTS?"*
+- **Llamada a Comentar:** *"Comment 1-9 below and challenge your friends!"*
+- **Botones de Interacción:** Badges vectoriales antialiased de **LIKE**, **SHARE** y **FOLLOW**.
+- **Gancho de Fidelización:** *"NEW VIDEO EVERY DAY!"*
 
 ---
 
-## 💻 Instalación en Otros Dispositivos
+## Instalación en 1 Clic Multiplataforma
 
-Para llevar este proyecto a cualquier otro ordenador o servidor (Windows, Linux, Mac o VPS):
+Para instalar este proyecto en cualquier ordenador, servidor o VPS:
 
 ### En Windows:
 Simplemente haz doble clic sobre:
@@ -58,10 +82,10 @@ setup.bat
 ```
 *(O ejecuta en PowerShell: `powershell -ExecutionPolicy Bypass -File .\setup.ps1`)*
 
-El script se encargará automáticamente de:
-1. Detectar e instalar **Python 3.12** si no está presente.
+El instalador automático se encarga de:
+1. Detectar e instalar **Python 3.12** si no está presente (vía `winget`).
 2. Detectar e instalar **FFmpeg** si no está presente.
-3. Crear todas las carpetas del proyecto (`Blurred_characters`, `assets`, `data`).
+3. Crear todas las carpetas del proyecto (`Blurred_characters`, `assets`, `backgrounds`, `data`).
 4. Instalar todas las librerías de `requirements.txt`.
 5. Crear el archivo `.env` inicial.
 
@@ -79,32 +103,36 @@ chmod +x setup.sh
 
 ---
 
-### 1. Generar 1 video de prueba de inmediato
+## Comandos de Terminal (CLI)
+
+Puedes ejecutar el generador directamente desde la consola:
+
+### 1. Generar 1 video (3 personajes) de inmediato
 ```powershell
 python main.py --once
 ```
-*Selecciona automáticamente el siguiente personaje de la base de datos que no haya sido utilizado aún.*
+*Selecciona automáticamente los siguientes 3 personajes del catálogo en rotación y renderiza el video completo de 50.5s.*
 
 ### 2. Iniciar el modo automático cada 4 horas
 ```powershell
 python main.py --schedule
 ```
-*Generará un video inmediatamente y después programará uno nuevo cada 4 horas de forma indefinida.*
+*Genera un video inmediatamente y después programa uno nuevo cada 4 horas de forma indefinida.*
 
-### 3. Generar un personaje específico
+### 3. Generar con personajes específicos
 ```powershell
-python main.py --character sonic --once
+python main.py --character mario,sonic,kratos --once
 ```
-*Puedes usar cualquier ID: `mario`, `sonic`, `kratos`, `master_chief`, `link`, `pikachu`, `pacman`, `cloud_strife`, `lara_croft`, `solid_snake`, `steve`, `crash_bandicoot`, `samus_aran`, `donkey_kong`, `geralt`, etc.*
+*Combina cualquiera de los más de 210 personajes icónicos del catálogo.*
 
-### 4. Consultar el estado del catálogo y personajes ya usados
+### 4. Consultar el catálogo de personajes y su estado
 ```powershell
 python main.py --list-characters
 ```
 
 ---
 
-## ⚙️ Conexión con YouTube Shorts y TikTok
+## Conexión con YouTube Shorts y TikTok
 
 Los videos siempre se generarán y quedarán guardados en `Blurred_characters/`. Cuando desees activar la subida directa:
 
@@ -113,31 +141,64 @@ Los videos siempre se generarán y quedarán guardados en `Blurred_characters/`.
 2. Habilita la **YouTube Data API v3**.
 3. En *Credenciales*, crea un **ID de cliente de OAuth** (tipo *Aplicación de escritorio*).
 4. Descarga el archivo JSON y colócalo en la raíz del proyecto como `client_secret.json`.
-5. La primera vez que el bot suba a YouTube, abrirá una ventana de navegador para que inicies sesión en tu canal. Después guardará el token en `youtube_token.json` y no volverá a pedirlo.
+5. La primera vez que el bot suba a YouTube, abrirá una ventana de navegador para iniciar sesión en tu canal. Después guardará el token en `youtube_token.json` para todas las subidas automáticas futuras.
 
 ### TikTok:
 1. Copia `.env.example` a un nuevo archivo `.env`:
-   ```powershell
-   copy .env.example .env
-   ```
+ ```powershell
+ copy .env.example .env
+ ```
 2. Introduce tu token de acceso en `TIKTOK_ACCESS_TOKEN`.
 
 ---
 
-## 🎨 Agregar Nuevos Personajes
+## Catálogo de 210+ Personajes Verificados
 
-Para añadir más personajes, simplemente abre `data/characters.json` y añade un nuevo bloque:
-```json
-{
-  "id": "shadow",
-  "name": "Shadow the Hedgehog",
-  "game": "Sonic / SEGA",
-  "wiki_page": "Shadow_the_Hedgehog",
-  "clues": [
-    "Creado por el Dr. Gerald Robotnik como la forma de vida suprema.",
-    "El gran rival oscuro de Sonic con botas propulsoras."
-  ],
-  "tags": ["#Shadow", "#Sonic", "#SEGA", "#Gaming", "#Shorts"]
-}
+La base de datos en `data/characters.json` cuenta con **más de 210 personajes seleccionados**:
+- **73 luchadores de Super Smash Bros Ultimate** con renders transparentes directos en alta resolución.
+- **50 Pokémon** de múltiples generaciones.
+- **87 Leyendas de Videojuegos Multiplataforma** (Kratos, Master Chief, Solid Snake, Geralt de Rivia, Doom Slayer, Gordon Freeman, Lara Croft, Arthur Morgan, etc.).
+
+Si un personaje no dispone de imagen local en `assets/characters/`, el sistema descarga automáticamente el render oficial en alta resolución desde Wikipedia o el CDN de GitHub.
+
+---
+
+## Estructura del Proyecto
+
 ```
-El sistema descargará automáticamente la imagen oficial desde Wikipedia si no colocas tu propia imagen PNG en `assets/characters/shadow.png`.
+CharacterQuiz/
+│
+├── Blurred_characters/ # Carpeta de salida para videos MP4 generados y metadatos JSON
+├── backgrounds/ # 24+ fondos temáticos de videojuegos con adaptación automática y viñeteado
+├── assets/
+│ ├── characters/ # Imágenes de personajes PNG transparentes en alta resolución
+│ └── audio/
+│ ├── bgm/ # Bandas sonoras chiptune / 16-bit RPG con licencia CC0 libre de copyright
+│ └── sfx/ # Tic-tacs de reloj analógico, beeps, campana de revelación, whoosh
+│
+├── data/
+│ ├── characters.json # Base de datos de más de 210 personajes con juego y etiquetas
+│ └── history.json # Historial de rotación persistente para evitar repeticiones
+│
+├── src/
+│ ├── config.py # Configuración central (resolución, FPS, intervalos, tiempos de ronda)
+│ ├── character_manager.py # Gestión de rotación y descarga dinámica de Wikipedia / CDN
+│ ├── audio_engine.py # Sintetizador procedural 44.1kHz en NumPy y mezclador de audio CC0
+│ ├── video_generator.py # Motor de renderizado con pixelado progresivo, intro, transiciones y MoviePy 2.0
+│ ├── scheduler.py # Demonio de programación en segundo plano cada 4 horas
+│ └── uploaders/
+│ ├── youtube_uploader.py # Integración con YouTube Data API v3 (#Shorts)
+│ ├── tiktok_uploader.py # Integración con TikTok Content Posting API v2
+│ └── manager.py # Despachador de subidas y registro de estado
+│
+├── .env.example # Plantilla de variables de entorno
+├── requirements.txt # Dependencias de paquetes de Python
+├── setup.bat / setup.ps1 # Instaladores automáticos de 1 clic para Windows
+├── setup.sh # Instalador automático para Linux / macOS
+├── run.bat # Menú interactivo de ejecución en Windows
+├── main.py # Punto de entrada principal CLI
+├── PORTFOLIO.md # Caso de estudio y guía técnica de portfolio (Inglés)
+├── PORTFOLIO_es.md # Caso de estudio y guía técnica de portfolio (Español)
+├── README.md # Documentación en inglés
+└── README_es.md # Documentación en español
+```

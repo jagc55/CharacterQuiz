@@ -20,21 +20,31 @@ from .config import (
     VIDEO_DURATION,
     CHARACTERS_PER_VIDEO,
     ROUND_DURATION,
-    ROUND_REVEAL_START
+    ROUND_REVEAL_START,
+    INTRO_DURATION,
+    TRANSITION_DURATION
 )
 
 class AudioEngine:
     def __init__(self, sample_rate=44100):
         self.sample_rate = sample_rate
 
-    def get_or_create_soundtrack(self, duration=VIDEO_DURATION, output_path=None, num_rounds=CHARACTERS_PER_VIDEO, round_duration=ROUND_DURATION):
+    def get_or_create_soundtrack(
+        self,
+        duration=VIDEO_DURATION,
+        output_path=None,
+        num_rounds=CHARACTERS_PER_VIDEO,
+        round_duration=ROUND_DURATION,
+        intro_duration=INTRO_DURATION,
+        transition_duration=TRANSITION_DURATION
+    ):
         """
-        Genera o mezcla la banda sonora sincronizada con el número de rondas.
+        Genera o mezcla la banda sonora sincronizada con el número de rondas, intro y transiciones.
         Utiliza música de videojuegos sin copyright (chiptune / 16-bit) desde assets/audio/bgm/
-        y mezcla sobre ella los efectos de sonido de cuenta atrás y revelación.
+        y mezcla sobre ella los efectos de sonido de cuenta atrás, transiciones whoosh y revelación.
         """
         if output_path is None:
-            output_path = AUDIO_DIR / f"soundtrack_{num_rounds}rounds_{int(duration)}s.wav"
+            output_path = AUDIO_DIR / f"soundtrack_{num_rounds}rounds_{int(duration*10)}tenth.wav"
         else:
             output_path = Path(output_path)
 
@@ -48,12 +58,27 @@ class AudioEngine:
             try:
                 selected_bgm = random.choice(bgm_files)
                 print(f"[Audio] Música de fondo seleccionada (sin copyright): {selected_bgm.name}")
-                return self._mix_bgm_with_sfx(selected_bgm, duration, output_path, num_rounds, round_duration)
+                return self._mix_bgm_with_sfx(
+                    selected_bgm,
+                    duration,
+                    output_path,
+                    num_rounds,
+                    round_duration,
+                    intro_duration,
+                    transition_duration
+                )
             except Exception as e:
                 print(f"Aviso: No se pudo mezclar BGM externa ({e}). Generando pista sintética...")
 
         # 2. Respaldo: generar pista procedural completa
-        self._synthesize_full_track(duration, output_path, num_rounds=num_rounds, round_duration=round_duration)
+        self._synthesize_full_track(
+            duration,
+            output_path,
+            num_rounds=num_rounds,
+            round_duration=round_duration,
+            intro_duration=intro_duration,
+            transition_duration=transition_duration
+        )
         return str(output_path)
 
     def _generate_clock_tick(self, is_tock=False):
@@ -71,6 +96,22 @@ class AudioEngine:
         noise = np.random.normal(0, 0.08, n) * np.exp(-t * 260.0)
         out = (click1 + click2 + noise)
         return (out / max(np.max(np.abs(out)), 1e-5) * 0.32).astype(np.float32)
+
+    def _generate_whoosh(self, duration=0.45):
+        """Genera un efecto de sonido limpio y cinemático de barrido / whoosh para las transiciones."""
+        num_samples = int(self.sample_rate * duration)
+        t = np.linspace(0, duration, num_samples, endpoint=False)
+        # Ruido modulado con curva campana
+        noise = np.random.normal(0, 0.4, num_samples)
+        env = (np.sin(np.pi * (t / duration)) ** 2)
+        # Tono modulado que asciende y desciende (barrido de frecuencia)
+        freq = 250.0 + 800.0 * np.sin(np.pi * (t / duration))
+        sweep = np.sin(2 * np.pi * freq * t) * 0.3
+        sound = (noise + sweep) * env
+        # Filtro de suavizado básico
+        kernel_size = 15
+        sound = np.convolve(sound, np.ones(kernel_size) / kernel_size, mode='same')
+        return (sound / max(np.max(np.abs(sound)), 1e-5) * 0.45).astype(np.float32)
 
     def _generate_analog_alarm_bell(self, duration=1.4):
         """Genera el repiqueteo metálico característico de un despertador analógico de doble campana."""
@@ -122,21 +163,45 @@ class AudioEngine:
         synth = self._generate_analog_alarm_bell(duration=1.6)
         return synth, synth
 
-    def _synthesize_sfx_track(self, duration, num_rounds, round_duration, output_path):
-        """Genera los efectos de sonido: reloj/cronómetro durante el temporizador y despertador analógico tradicional al finalizar."""
+    def _synthesize_sfx_track(
+        self,
+        duration,
+        num_rounds,
+        round_duration,
+        intro_duration,
+        transition_duration,
+        output_path
+    ):
+        """
+        Genera los efectos de sonido:
+        1. Transición Intro -> Minigame (whoosh).
+        2. Reloj/cronómetro durante el temporizador de cada ronda.
+        3. Despertador analógico tradicional al llegar a la revelación (12s de la ronda).
+        4. Transición Minigame -> Outro (whoosh).
+        """
         num_samples = int(self.sample_rate * duration)
         left = np.zeros(num_samples, dtype=np.float32)
         right = np.zeros(num_samples, dtype=np.float32)
 
         tick = self._generate_clock_tick(is_tock=False)
         tock = self._generate_clock_tick(is_tock=True)
+        whoosh = self._generate_whoosh(duration=min(0.45, transition_duration))
         alarm_left, alarm_right = self._get_traditional_alarm_sound()
 
+        # 1. Whoosh en Transición 1 (Intro -> Minigame)
+        trans1_idx = int(intro_duration * self.sample_rate)
+        w_len = min(len(whoosh), num_samples - trans1_idx)
+        if trans1_idx < num_samples and w_len > 0:
+            left[trans1_idx:trans1_idx + w_len] += whoosh[:w_len]
+            right[trans1_idx:trans1_idx + w_len] += whoosh[:w_len]
+
+        # 2. Rondas del Minigame
+        minigame_start = intro_duration + transition_duration
         for r in range(num_rounds):
-            round_start = r * round_duration
+            round_start = minigame_start + (r * round_duration)
             reveal_time = round_start + ROUND_REVEAL_START
 
-            # 1. Reloj / Cronómetro mientras baja la barra del temporizador (cada 0.5s hasta reveal_time)
+            # Reloj / Cronómetro mientras baja la barra del temporizador (cada 0.5s hasta reveal_time)
             num_ticks = int(ROUND_REVEAL_START / 0.5)
             for i in range(1, num_ticks):
                 t_tick = round_start + (i * 0.5)
@@ -149,14 +214,21 @@ class AudioEngine:
                     left[t_idx:t_idx + snd_len] += snd
                     right[t_idx:t_idx + snd_len] += snd
 
-            # 2. Despertador analógico metálico tradicional al llegar al final del tiempo (12s)
+            # Despertador analógico metálico tradicional al llegar al final del tiempo de adivinanza
             rev_idx = int(reveal_time * self.sample_rate)
             bell_len = min(len(alarm_left), num_samples - rev_idx)
             if rev_idx < num_samples and bell_len > 0:
                 left[rev_idx:rev_idx + bell_len] += alarm_left[:bell_len] * 0.75
                 right[rev_idx:rev_idx + bell_len] += alarm_right[:bell_len] * 0.75
 
-        # En la pantalla final (Outro) NO se reproduce ningún sonido de fin ni alarma
+        # 3. Whoosh en Transición 2 (Minigame -> Outro)
+        minigame_end = minigame_start + (num_rounds * round_duration)
+        trans2_idx = int(minigame_end * self.sample_rate)
+        w_len2 = min(len(whoosh), num_samples - trans2_idx)
+        if trans2_idx < num_samples and w_len2 > 0:
+            left[trans2_idx:trans2_idx + w_len2] += whoosh[:w_len2]
+            right[trans2_idx:trans2_idx + w_len2] += whoosh[:w_len2]
+
         # Normalizar si es necesario
         max_val = max(np.max(np.abs(left)), np.max(np.abs(right)), 1e-5)
         if max_val > 0.95:
@@ -178,16 +250,31 @@ class AudioEngine:
 
         return str(output_path)
 
-    def _mix_bgm_with_sfx(self, bgm_file, duration, output_path, num_rounds, round_duration):
-        """Mezcla la pista de música de fondo con los efectos sonoros sintetizados."""
+    def _mix_bgm_with_sfx(
+        self,
+        bgm_file,
+        duration,
+        output_path,
+        num_rounds,
+        round_duration,
+        intro_duration,
+        transition_duration
+    ):
+        """Mezcla la pista de música de fondo con los efectos sonoros sincronizados."""
         sfx_temp = AUDIO_DIR / "_temp_sfx.wav"
-        self._synthesize_sfx_track(duration, num_rounds, round_duration, sfx_temp)
+        self._synthesize_sfx_track(
+            duration,
+            num_rounds,
+            round_duration,
+            intro_duration,
+            transition_duration,
+            sfx_temp
+        )
 
         bgm_clip = AudioFileClip(str(bgm_file))
 
-        # Ajustar duración de la música (repetir o recortar a 30s exactos)
+        # Ajustar duración de la música (hacer bucle si es menor)
         if bgm_clip.duration < duration:
-            # Si la pista es más corta que 30s, hacer bucle
             repeats = int(np.ceil(duration / bgm_clip.duration))
             from moviepy import concatenate_audioclips
             bgm_clip = concatenate_audioclips([bgm_clip] * repeats)
@@ -217,7 +304,15 @@ class AudioEngine:
 
         return str(output_path)
 
-    def _synthesize_full_track(self, duration, output_path, num_rounds=3, round_duration=10.0):
+    def _synthesize_full_track(
+        self,
+        duration,
+        output_path,
+        num_rounds=3,
+        round_duration=10.0,
+        intro_duration=INTRO_DURATION,
+        transition_duration=TRANSITION_DURATION
+    ):
         """Generador procedural de respaldo de pista completa en caso de no haber BGM externa."""
         num_samples = int(self.sample_rate * duration)
         left = np.zeros(num_samples, dtype=np.float32)
@@ -228,11 +323,19 @@ class AudioEngine:
         alarm_left, alarm_right = self._get_traditional_alarm_sound()
         tick = self._generate_clock_tick(is_tock=False)
         tock = self._generate_clock_tick(is_tock=True)
+        whoosh = self._generate_whoosh(duration=min(0.45, transition_duration))
 
+        # Whoosh 1
+        trans1_idx = int(intro_duration * self.sample_rate)
+        w_len = min(len(whoosh), num_samples - trans1_idx)
+        if trans1_idx < num_samples and w_len > 0:
+            left[trans1_idx:trans1_idx + w_len] += whoosh[:w_len]
+            right[trans1_idx:trans1_idx + w_len] += whoosh[:w_len]
+
+        minigame_start = intro_duration + transition_duration
         for r in range(num_rounds):
-            round_start = r * round_duration
+            round_start = minigame_start + (r * round_duration)
             reveal_time = round_start + ROUND_REVEAL_START
-            round_end = min((r + 1) * round_duration, duration)
 
             tension_duration = reveal_time - round_start
             num_beats = int(tension_duration / beat_interval)
@@ -273,12 +376,20 @@ class AudioEngine:
                     left[t_idx:t_idx + snd_len] += snd
                     right[t_idx:t_idx + snd_len] += snd
 
-            # Despertador analógico metálico tradicional al llegar a los 15s
+            # Despertador analógico tradicional
             rev_idx = int(reveal_time * self.sample_rate)
             bell_len = min(len(alarm_left), num_samples - rev_idx)
             if rev_idx < num_samples and bell_len > 0:
                 left[rev_idx:rev_idx + bell_len] += alarm_left[:bell_len] * 0.75
                 right[rev_idx:rev_idx + bell_len] += alarm_right[:bell_len] * 0.75
+
+        # Whoosh 2
+        minigame_end = minigame_start + (num_rounds * round_duration)
+        trans2_idx = int(minigame_end * self.sample_rate)
+        w_len2 = min(len(whoosh), num_samples - trans2_idx)
+        if trans2_idx < num_samples and w_len2 > 0:
+            left[trans2_idx:trans2_idx + w_len2] += whoosh[:w_len2]
+            right[trans2_idx:trans2_idx + w_len2] += whoosh[:w_len2]
 
         max_val = max(np.max(np.abs(left)), np.max(np.abs(right)), 1e-5)
         if max_val > 0.95:

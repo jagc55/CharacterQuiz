@@ -40,11 +40,19 @@ VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 VIDEO_FPS = 30
 
-# Estructura Multi-Personaje (3 personajes por video + Outro final)
+# Estructura Multi-Personaje (Intro + 3 personajes + Outro con transiciones)
 CHARACTERS_PER_VIDEO = 3
-ROUND_DURATION = 14.5  # 12.0s de adivinanza (4s por fase) + 2.5s de revelación
-OUTRO_DURATION = 3.5   # Pantalla final de llamada a la acción en segundos
-VIDEO_DURATION = (ROUND_DURATION * CHARACTERS_PER_VIDEO) + OUTRO_DURATION  # 47.0s en total
+INTRO_DURATION = 2.5       # Pantalla de introducción inicial en segundos
+TRANSITION_DURATION = 0.5  # Duración de cada transición (Intro -> Juego y Juego -> Outro)
+ROUND_DURATION = 14.5      # 12.0s de adivinanza (4s por fase) + 2.5s de revelación
+OUTRO_DURATION = 3.5       # Pantalla final de llamada a la acción en segundos
+VIDEO_DURATION = (
+    INTRO_DURATION +
+    TRANSITION_DURATION +
+    (ROUND_DURATION * CHARACTERS_PER_VIDEO) +
+    TRANSITION_DURATION +
+    OUTRO_DURATION
+)  # 50.5s en total (ideal para formato Shorts/TikTok < 60s)
 
 # Fases de puntuación y pixelado por ronda (en segundos de 0.0 a 14.5)
 PHASE_3PTS_END = 4.0       # 0.0s - 4.0s: Pixelado alto -> 3 PUNTOS

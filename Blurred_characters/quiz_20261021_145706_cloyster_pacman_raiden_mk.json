@@ -1,0 +1,50 @@
+{
+  "title": "Can you guess these 3 video game characters? Gamer Quiz #Shorts",
+  "description": "Are you a true gamer? Guess the 3 characters hidden behind the pixels.\n\nMax score: 9 Points (3 pts per character)\n\nRound 1: Cloyster (Pokémon)\nRound 2: Pac-Man (Pac-Man)\nRound 3: Raiden (Mortal Kombat)\n\n#PixelQuiz #Raiden #GamingTrivia #VideoGames #Pac-Man #Pokemon #Nintendo #MortalKombat #GuessTheCharacter #Shorts #Gaming #GamerQuiz",
+  "characters": [
+    {
+      "id": "cloyster",
+      "name": "Cloyster",
+      "game": "Pokémon"
+    },
+    {
+      "id": "pacman",
+      "name": "Pac-Man",
+      "game": "Pac-Man"
+    },
+    {
+      "id": "raiden_mk",
+      "name": "Raiden",
+      "game": "Mortal Kombat"
+    }
+  ],
+  "character_id": "cloyster",
+  "character_ids": [
+    "cloyster",
+    "pacman",
+    "raiden_mk"
+  ],
+  "character_name": "Cloyster, Pac-Man, Raiden",
+  "game": "Pokémon / Nintendo, Pac-Man / Bandai Namco, Mortal Kombat / NetherRealm",
+  "video_path": "C:\\Users\\juana\\Desktop\\Proyectos\\CharacterQuiz\\Blurred_characters\\quiz_20261021_145706_cloyster_pacman_raiden_mk.mp4",
+  "background": "bg15.jpg",
+  "created_at": "2026-10-21T14:57:39.332193",
+  "tags": [
+    "#PixelQuiz",
+    "#Raiden",
+    "#GamingTrivia",
+    "#VideoGames",
+    "#Pac-Man",
+    "#Pokemon",
+    "#Nintendo",
+    "#MortalKombat",
+    "#GuessTheCharacter",
+    "#Shorts",
+    "#Gaming",
+    "#GamerQuiz",
+    "#QuizGamer",
+    "#Cloyster"
+  ],
+  "youtube_status": "SKIPPED_NO_CREDENTIALS",
+  "tiktok_status": "ERROR"
+}

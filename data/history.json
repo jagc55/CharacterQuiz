@@ -118,5 +118,29 @@
     "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260919_235730_mario_sonic_link.mp4",
     "youtube_status": "SKIPPED_NO_CREDENTIALS",
     "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "rapidash",
+    "character_ids": [
+      "rapidash",
+      "doom_slayer",
+      "gordon_freeman"
+    ],
+    "timestamp": "2026-09-20T03:49:28.083388",
+    "video_path": "C:\\Users\\juana\\Desktop\\CharacterQuiz\\Blurred_characters\\quiz_20260920_034900_rapidash_doom_slayer_gordon_freeman.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
+  },
+  {
+    "character_id": "cloyster",
+    "character_ids": [
+      "cloyster",
+      "pacman",
+      "raiden_mk"
+    ],
+    "timestamp": "2026-10-21T14:57:40.140416",
+    "video_path": "C:\\Users\\juana\\Desktop\\Proyectos\\CharacterQuiz\\Blurred_characters\\quiz_20261021_145706_cloyster_pacman_raiden_mk.mp4",
+    "youtube_status": "SKIPPED_NO_CREDENTIALS",
+    "tiktok_status": "ERROR"
   }
 ]
